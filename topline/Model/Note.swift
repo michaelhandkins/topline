@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import RealmSwift
 
-struct Note {
+class Note: Object {
     
     @objc dynamic var title: String = ""
-    
+    @objc dynamic var text: [String] = []
     
 }
