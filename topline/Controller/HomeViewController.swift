@@ -34,7 +34,7 @@ class HomeViewController: UITableViewController {
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
-        
+        performSegue(withIdentifier: "toNoteSegue", sender: self)
         
     }
     

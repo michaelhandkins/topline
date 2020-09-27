@@ -11,6 +11,6 @@ import RealmSwift
 class Note: Object {
     
     @objc dynamic var title: String = ""
-    @objc dynamic var text: [String] = []
+    var text: [String] = []
     
 }

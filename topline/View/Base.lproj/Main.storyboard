@@ -38,41 +38,41 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="O0L-CT-aJd" kind="show" id="fT8-p5-jqL"/>
+                        <segue destination="aBn-Gq-wO3" kind="show" identifier="toNoteSegue" id="phk-vF-4dC"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bYN-wc-yj0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="535" y="-40"/>
         </scene>
-        <!--Table View Controller-->
-        <scene sceneID="8Ik-me-nfc">
+        <!--Note View Controller-->
+        <scene sceneID="tAv-c8-ulq">
             <objects>
-                <tableViewController id="O0L-CT-aJd" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="gBh-mw-JMQ">
+                <tableViewController id="aBn-Gq-wO3" customClass="NoteViewController" customModule="topline" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mMC-8V-cW6">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="newNoteCell" id="sF9-cq-V4C">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="lyricsCell" id="LtE-A5-qBA" customClass="newNoteTableViewCell" customModule="topline" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sF9-cq-V4C" id="5zd-eR-4qI">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LtE-A5-qBA" id="m00-ds-b5Y">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="O0L-CT-aJd" id="BkR-gs-zzf"/>
-                            <outlet property="delegate" destination="O0L-CT-aJd" id="KKh-Lw-EXk"/>
+                            <outlet property="dataSource" destination="aBn-Gq-wO3" id="dbF-Qx-Tfk"/>
+                            <outlet property="delegate" destination="aBn-Gq-wO3" id="wET-d8-glo"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="ygy-li-ps4"/>
+                    <navigationItem key="navigationItem" id="xaG-0j-fEu"/>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="a4Y-pv-M67" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="F71-Ao-By3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1296" y="-40"/>
+            <point key="canvasLocation" x="1313" y="-40"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1FL-KH-RMT">
