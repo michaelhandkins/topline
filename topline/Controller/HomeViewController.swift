@@ -6,28 +6,32 @@
 //
 
 import UIKit
+import RealmSwift
 
 class HomeViewController: UITableViewController {
     
-    var notes: [Note] = []
+    let realm = try! Realm()
+    
+    var songs: Results<Note>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.rowHeight = 55
+        loadSongs()
     }
 
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return notes.count
+        return songs?.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "homeNoteCell", for: indexPath)
 
-        cell.textLabel?.text = notes[indexPath.row].title
+        cell.textLabel?.text = songs?[indexPath.row].title
 
         return cell
     }
@@ -35,6 +39,26 @@ class HomeViewController: UITableViewController {
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         performSegue(withIdentifier: "toNoteSegue", sender: self)
+        
+    }
+    
+    func loadSongs() {
+        songs = realm.objects(Note.self)
+        tableView.reloadData()
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "toSongSegue", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let vc = segue.destination as! ViewSongController
+        
+        if songs != nil {
+            if let selectedSong = tableView.indexPathForSelectedRow {
+                vc.song = songs![selectedSong.row]
+            }
+        }
         
     }
     

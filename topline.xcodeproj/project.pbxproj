@@ -11,6 +11,7 @@
 		C2B54F5A2520F006007BE142 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B54F592520F006007BE142 /* NoteViewController.swift */; };
 		C2B54F6525210A57007BE142 /* newNoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B54F6325210A57007BE142 /* newNoteTableViewCell.swift */; };
 		C2B54F6625210A57007BE142 /* newNoteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2B54F6425210A57007BE142 /* newNoteTableViewCell.xib */; };
+		C2B54F6925211E32007BE142 /* ViewSongController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B54F6825211E32007BE142 /* ViewSongController.swift */; };
 		C2B9D6582520E1A2002123F0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B9D6572520E1A2002123F0 /* AppDelegate.swift */; };
 		C2B9D65A2520E1A2002123F0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B9D6592520E1A2002123F0 /* SceneDelegate.swift */; };
 		C2B9D65F2520E1A2002123F0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2B9D65D2520E1A2002123F0 /* Main.storyboard */; };
@@ -27,6 +28,7 @@
 		C2B54F592520F006007BE142 /* NoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		C2B54F6325210A57007BE142 /* newNoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = newNoteTableViewCell.swift; sourceTree = "<group>"; };
 		C2B54F6425210A57007BE142 /* newNoteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = newNoteTableViewCell.xib; sourceTree = "<group>"; };
+		C2B54F6825211E32007BE142 /* ViewSongController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewSongController.swift; sourceTree = "<group>"; };
 		C2B9D6542520E1A2002123F0 /* topline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = topline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2B9D6572520E1A2002123F0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C2B9D6592520E1A2002123F0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 			children = (
 				C2B9D6712520E30B002123F0 /* HomeViewController.swift */,
 				C2B54F592520F006007BE142 /* NoteViewController.swift */,
+				C2B54F6825211E32007BE142 /* ViewSongController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 			files = (
 				C2B9D6582520E1A2002123F0 /* AppDelegate.swift in Sources */,
 				C2B9D65A2520E1A2002123F0 /* SceneDelegate.swift in Sources */,
+				C2B54F6925211E32007BE142 /* ViewSongController.swift in Sources */,
 				C2B9D6722520E30B002123F0 /* HomeViewController.swift in Sources */,
 				C2B54F5A2520F006007BE142 /* NoteViewController.swift in Sources */,
 				C2B54F6525210A57007BE142 /* newNoteTableViewCell.swift in Sources */,

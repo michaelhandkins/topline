@@ -39,6 +39,7 @@
                     </navigationItem>
                     <connections>
                         <segue destination="aBn-Gq-wO3" kind="show" identifier="toNoteSegue" id="phk-vF-4dC"/>
+                        <segue destination="SRE-nI-Uy4" kind="show" identifier="toSongSegue" id="T4h-9D-6p2"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bYN-wc-yj0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -72,7 +73,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F71-Ao-By3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1313" y="-40"/>
+            <point key="canvasLocation" x="1397" y="-353"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1FL-KH-RMT">
@@ -91,6 +92,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JRG-Ip-rBU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-257.97101449275362" y="-40.178571428571423"/>
+        </scene>
+        <!--View Song Controller-->
+        <scene sceneID="QOy-Hw-uod">
+            <objects>
+                <tableViewController id="SRE-nI-Uy4" customClass="ViewSongController" customModule="topline" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="0AZ-Ym-TP2">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <connections>
+                            <outlet property="dataSource" destination="SRE-nI-Uy4" id="g31-Gv-WQM"/>
+                            <outlet property="delegate" destination="SRE-nI-Uy4" id="PzH-Ld-TpU"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="3n8-K0-Igm"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9Qp-ap-6fO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1368" y="378"/>
         </scene>
     </scenes>
     <resources>

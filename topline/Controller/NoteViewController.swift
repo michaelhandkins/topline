@@ -14,9 +14,18 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
     var lyrics: [String] = []
     var noteTitle: String = ""
     var notes: [Note]? = []
+    var song: Note = Note()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        do {
+            try realm.write {
+                realm.add(song)
+            }
+        } catch {
+            print("Error when adding new song to Realm: \(error)")
+        }
 
         tableView.register(UINib(nibName: "newNoteTableViewCell", bundle: nil), forCellReuseIdentifier: "lyricsCell")
     }
@@ -35,6 +44,10 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lyricsCell", for: indexPath) as! newNoteTableViewCell
         
+        if let songLyrics = song.lyrics {
+            cell.lyricsField.text = songLyrics[indexPath.row]
+        }
+        
         cell.lyricsField.delegate = self
 
         return cell
@@ -50,6 +63,18 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         if textField.text != "" {
             
             lyrics.append(textField.text!)
+            song.lyrics = lyrics
+            
+            do {
+                try realm.write {
+                    song.lyrics = lyrics
+                    print("Lyrics successfully updated to song in Realm")
+                }
+            } catch {
+                print("Error when updating song lyrics in Realm: \(error)")
+            }
+            
+            tableView.reloadData()
             
         }
         
