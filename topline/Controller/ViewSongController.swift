@@ -14,8 +14,12 @@ class ViewSongController: UITableViewController {
     var song: Note? {
         didSet {
             print("Song assigned to controller")
+            lyrics = song?.lyrics
+            print(lyrics)
         }
     }
+    
+    var lyrics: List<String>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +37,7 @@ class ViewSongController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lyricsCell", for: indexPath) as! newNoteTableViewCell
 
+        cell.lyricsField.text = "test"
         
 
         return cell

@@ -20,6 +20,10 @@ class HomeViewController: UITableViewController {
         tableView.rowHeight = 55
         loadSongs()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        loadSongs()
+    }
 
     // MARK: - Table view data source
 
@@ -52,12 +56,21 @@ class HomeViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let vc = segue.destination as! ViewSongController
         
-        if songs != nil {
-            if let selectedSong = tableView.indexPathForSelectedRow {
-                vc.song = songs![selectedSong.row]
+        if segue.identifier == "toSongSegue" {
+            
+            let vc = segue.destination as! ViewSongController
+            
+            if songs != nil {
+                if let selectedSong = tableView.indexPathForSelectedRow {
+                    vc.song = songs![selectedSong.row]
+                }
             }
+            
+        } else {
+            
+            let vc = segue.destination as! NoteViewController
+            
         }
         
     }

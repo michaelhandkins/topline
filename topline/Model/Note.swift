@@ -11,6 +11,6 @@ import RealmSwift
 class Note: Object {
     
     @objc dynamic var title: String = "New Song"
-    var lyrics: [String]?
+    let lyrics = List<LyricLine>()
     
 }
