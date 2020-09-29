@@ -47,7 +47,7 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         cell.lyricsField.tag = indexPath.row
         
         if let safeLyrics = lyrics {
-            if safeLyrics.count == indexPath.row + 1 {
+            if indexPath.row < safeLyrics.count {
                 cell.lyricsField.text = safeLyrics[indexPath.row].text
             } else {
                 cell.lyricsField.text = ""
