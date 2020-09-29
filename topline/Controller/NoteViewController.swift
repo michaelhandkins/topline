@@ -16,6 +16,7 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         do {
             try realm.write {
                 realm.add(song)
@@ -24,7 +25,7 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         } catch {
             print("Error when adding new song to Realm: \(error)")
         }
-
+        
         tableView.register(UINib(nibName: "newNoteTableViewCell", bundle: nil), forCellReuseIdentifier: "lyricsCell")
     }
 
@@ -69,10 +70,10 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         // What do when the lyrics in a cell are being edited as opposed to a brand new line being added
         if let safeLyrics = lyrics {
             if safeLyrics.count >= textField.tag + 1 {
+                let updatedLyricLine = LyricLine()
+                updatedLyricLine.text = textField.text!
+                safeLyrics[textField.tag] = updatedLyricLine
                 do {
-                    let updatedLyricLine = LyricLine()
-                    updatedLyricLine.text = textField.text!
-                    safeLyrics[textField.tag] = updatedLyricLine
                     try realm.write {
                         self.song.lyrics[textField.tag] = updatedLyricLine
                         print("Successfully updated existing lyric line in Realm")

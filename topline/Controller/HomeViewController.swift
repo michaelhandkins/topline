@@ -10,10 +10,12 @@ import RealmSwift
 
 class HomeViewController: UITableViewController {
     
+    var addButtonPressed: Bool = false
     let realm = try! Realm()
+    var selectedSong: Note?
     
     var songs: Results<Note>?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,6 +25,8 @@ class HomeViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         loadSongs()
+        selectedSong = nil
+        addButtonPressed = false
     }
 
     // MARK: - Table view data source
@@ -42,6 +46,7 @@ class HomeViewController: UITableViewController {
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
+        addButtonPressed = true
         performSegue(withIdentifier: "toNoteSegue", sender: self)
         
     }
@@ -52,27 +57,18 @@ class HomeViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedSong = songs![indexPath.row]
         performSegue(withIdentifier: "toSongSegue", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "toSongSegue" {
-            
-            let vc = segue.destination as! ViewSongController
-            
-            if songs != nil {
-                if let selectedSong = tableView.indexPathForSelectedRow {
-                    vc.song = songs![selectedSong.row]
-                }
-            }
-            
-        } else {
-            
+        if segue.identifier == "toNoteSegue" {
             let vc = segue.destination as! NoteViewController
-            
+        } else {
+            let vc = segue.destination as! ViewSongController
+            vc.song = selectedSong
         }
-        
     }
     
 
