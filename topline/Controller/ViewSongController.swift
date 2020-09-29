@@ -27,7 +27,7 @@ class ViewSongController: UITableViewController, UITextFieldDelegate {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return song?.lyrics.count ?? 1
+        return song!.lyrics.count + 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -35,7 +35,11 @@ class ViewSongController: UITableViewController, UITextFieldDelegate {
         
         cell.lyricsField.delegate = self
         
-        cell.lyricsField.text = song?.lyrics[indexPath.row].text
+        if indexPath.row < song!.lyrics.count {
+            cell.lyricsField.text = song?.lyrics[indexPath.row].text
+        }
+        
+        
 
         return cell
     }
