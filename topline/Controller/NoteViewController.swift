@@ -11,7 +11,7 @@ import RealmSwift
 class NoteViewController: UITableViewController, UITextFieldDelegate {
     
     let realm = try! Realm()
-    var lyrics: List<LyricLine> = List()
+    var lyrics: List<LyricLine>?
     var song: Note = Note()
 
     override func viewDidLoad() {
@@ -32,7 +32,11 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return lyrics.count + 1
+        if let safeLyrics = lyrics {
+            return safeLyrics.count + 1
+        } else {
+            return 1
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -40,7 +44,17 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         
         cell.lyricsField.delegate = self
         
-        cell.lyricsField.text = lyrics[indexPath.row].text
+        cell.lyricsField.tag = indexPath.row
+        
+        if let safeLyrics = lyrics {
+            if safeLyrics.count == indexPath.row + 1 {
+                cell.lyricsField.text = safeLyrics[indexPath.row].text
+            } else {
+                cell.lyricsField.text = ""
+            }
+        }
+        
+        
 
         return cell
     }
@@ -51,27 +65,26 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        
-        
-        if let selectedCell = tableView.indexPathForSelectedRow {
-            // What do when the lyrics in a cell are being edited as opposed to a brand new line being added
-            if lyrics.count >= selectedCell.row + 1 {
+        print("Text field ended editing")
+        // What do when the lyrics in a cell are being edited as opposed to a brand new line being added
+        if let safeLyrics = lyrics {
+            if safeLyrics.count >= textField.tag + 1 {
                 do {
                     let updatedLyricLine = LyricLine()
                     updatedLyricLine.text = textField.text!
-                    lyrics[selectedCell.row] = updatedLyricLine
+                    safeLyrics[textField.tag] = updatedLyricLine
                     try realm.write {
-                        self.song.lyrics[selectedCell.row] = updatedLyricLine
+                        self.song.lyrics[textField.tag] = updatedLyricLine
                         print("Successfully updated existing lyric line in Realm")
                     }
                 } catch {
                     print("Error updating the lyrics for song in Realm: \(error)")
                 }
             } else {
-                // When a brand new line of lyrics is being added
+                // When a brand new line of lyrics is being added and there are already other lines that exist
                 let newLyricLine = LyricLine()
                 newLyricLine.text = textField.text!
-                lyrics.append(newLyricLine)
+                safeLyrics.append(newLyricLine)
                 do {
                     try self.realm.write {
                         self.song.lyrics.append(newLyricLine)
@@ -81,9 +94,26 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
                     print("Error when updating song lyrics in Realm: \(error)")
                 }
             }
+        } else {
+            // When the very first lyric line is being added to the song
+            print("Attempting to add first line of lyrics to song")
+            let newLyricLine = LyricLine()
+            newLyricLine.text = textField.text!
+            lyrics = List()
+            lyrics?.append(newLyricLine)
+            do {
+                try self.realm.write {
+                    self.song.lyrics.append(newLyricLine)
+                    print("First line of lyrics successfully added to song in Realm")
+                }
+            } catch {
+                print("Error when updating song lyrics in Realm: \(error)")
+            }
+            
         }
         
         tableView.reloadData()
+        
     }
 
 }
