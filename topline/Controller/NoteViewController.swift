@@ -11,7 +11,7 @@ import RealmSwift
 class NoteViewController: UITableViewController, UITextFieldDelegate {
     
     let realm = try! Realm()
-    var lyrics: List<String> = List()
+    var lyrics: List<LyricLine> = List()
     var song: Note = Note()
 
     override func viewDidLoad() {
@@ -19,6 +19,7 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         do {
             try realm.write {
                 realm.add(song)
+                print("Successfully added new song to Realm for the first time")
             }
         } catch {
             print("Error when adding new song to Realm: \(error)")
@@ -39,9 +40,7 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         
         cell.lyricsField.delegate = self
         
-        if let songLyrics = song.lyrics {
-            cell.lyricsField.text = songLyrics[indexPath.row]
-        }
+        cell.lyricsField.text = lyrics[indexPath.row].text
 
         return cell
     }
@@ -55,23 +54,28 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         
         
         if let selectedCell = tableView.indexPathForSelectedRow {
+            // What do when the lyrics in a cell are being edited as opposed to a brand new line being added
             if lyrics.count >= selectedCell.row + 1 {
                 do {
                     let updatedLyricLine = LyricLine()
                     updatedLyricLine.text = textField.text!
+                    lyrics[selectedCell.row] = updatedLyricLine
                     try realm.write {
                         self.song.lyrics[selectedCell.row] = updatedLyricLine
+                        print("Successfully updated existing lyric line in Realm")
                     }
                 } catch {
                     print("Error updating the lyrics for song in Realm: \(error)")
                 }
             } else {
+                // When a brand new line of lyrics is being added
                 let newLyricLine = LyricLine()
                 newLyricLine.text = textField.text!
+                lyrics.append(newLyricLine)
                 do {
                     try self.realm.write {
                         self.song.lyrics.append(newLyricLine)
-                        print("Lyrics successfully updated to song in Realm")
+                        print("Lyrics successfully added to song as a new line in Realm")
                     }
                 } catch {
                     print("Error when updating song lyrics in Realm: \(error)")
@@ -79,13 +83,7 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
             }
         }
         
-        updateLyrics()
         tableView.reloadData()
-    }
-    
-    func updateLyrics() {
-        
-        
     }
 
 }
