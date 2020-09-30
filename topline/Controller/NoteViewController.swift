@@ -28,6 +28,18 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         
         tableView.register(UINib(nibName: "newNoteTableViewCell", bundle: nil), forCellReuseIdentifier: "lyricsCell")
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if lyrics == nil && song.title == "New Song" {
+            do {
+                try realm.write {
+                    realm.delete(self.song)
+                }
+            } catch {
+                print("Error when deleting song from Realm because user never entered title or lyrics: \(error)")
+            }
+        }
+    }
 
     // MARK: - Table view data source
 
