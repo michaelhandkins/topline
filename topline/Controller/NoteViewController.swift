@@ -13,6 +13,7 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
     let realm = try! Realm()
     var lyrics: List<LyricLine>?
     var song: Note = Note()
+    var songTitle: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +54,7 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         
         cell.lyricsField.tag = indexPath.row
         
-        if indexPath.row == 0 {
+        if indexPath.row == 0 && song.title == "Untitled" {
             cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
             cell.lyricsField.textColor = UIColor.lightGray
             cell.lyricsField.text = "Song Title:"
@@ -61,10 +62,12 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         }
         
         if let safeLyrics = lyrics {
-            if indexPath.row < safeLyrics.count {
+            if indexPath.row < safeLyrics.count && indexPath.row != 0 {
                 cell.lyricsField.text = safeLyrics[indexPath.row].text
-            } else {
+            } else if indexPath.row >= safeLyrics.count && indexPath.row != 0 {
                 cell.lyricsField.text = ""
+            } else if indexPath.row == 0 && song.title != "Untitled" {
+                cell.lyricsField.text = song.title
             }
         }
         
@@ -89,8 +92,25 @@ extension NoteViewController: UITextViewDelegate {
         
         if textView.tag == 0 {
             if textView.text.isEmpty {
-                textView.text = "Placeholder"
+                textView.text = "Song Title:"
                 textView.textColor = UIColor.lightGray
+                songTitle = "Untitled"
+                do {
+                    try realm.write {
+                        self.song.title = songTitle!
+                    }
+                } catch {
+                    print("Error when updating song title to 'Untitled' in Realm: \(error)")
+                }
+            } else {
+                songTitle = textView.text
+                do {
+                    try realm.write {
+                        self.song.title = songTitle!
+                    }
+                } catch {
+                    print("Error when updating song title in Realm to user inputted text: \(error)")
+                }
             }
         }
         // What do when the lyrics in a cell are being edited as opposed to a brand new line being added

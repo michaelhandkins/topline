@@ -10,7 +10,7 @@ import RealmSwift
 
 class Note: Object {
     
-    @objc dynamic var title: String = "New Song"
+    @objc dynamic var title: String = "Untitled"
     let lyrics = List<LyricLine>()
     
 }

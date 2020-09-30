@@ -16,11 +16,14 @@ class ViewSongController: UITableViewController, UITextViewDelegate {
             print("Song assigned to controller")
         }
     }
+    var songTitle: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = ""
+        
         tableView.register(UINib(nibName: "newNoteTableViewCell", bundle: nil), forCellReuseIdentifier: "lyricsCell")
-        title = song?.title
     }
 
     // MARK: - Table view data source
@@ -37,15 +40,21 @@ class ViewSongController: UITableViewController, UITextViewDelegate {
         
         cell.lyricsField.tag = indexPath.row
         
-        if indexPath.row == 0 {
+        if indexPath.row == 0 && song!.title == "Untitled" {
             cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
             cell.lyricsField.textColor = UIColor.lightGray
             cell.lyricsField.text = "Song Title:"
             cell.recordButton.isHidden = true
         }
         
-        if indexPath.row < song!.lyrics.count {
-            cell.lyricsField.text = song?.lyrics[indexPath.row].text
+        if indexPath.row < song!.lyrics.count && indexPath.row != 0 {
+            cell.lyricsField.text = song!.lyrics[indexPath.row].text
+        } else if indexPath.row >= song!.lyrics.count && indexPath.row != 0 {
+            cell.lyricsField.text = ""
+        } else if indexPath.row == 0 && song!.title != "Untitled" {
+            cell.lyricsField.text = song!.title
+            cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
+            cell.recordButton.isHidden = true
         }
 
         return cell
@@ -64,8 +73,25 @@ class ViewSongController: UITableViewController, UITextViewDelegate {
         
         if textView.tag == 0 {
             if textView.text.isEmpty {
-                textView.text = "Placeholder"
+                textView.text = "Song Title:"
                 textView.textColor = UIColor.lightGray
+                songTitle = "Untitled"
+                do {
+                    try realm.write {
+                        self.song!.title = songTitle!
+                    }
+                } catch {
+                    print("Error when updating song title to 'Untitled' in Realm: \(error)")
+                }
+            } else {
+                songTitle = textView.text
+                do {
+                    try realm.write {
+                        self.song!.title = songTitle!
+                    }
+                } catch {
+                    print("Error when updating song title in Realm to user inputted text: \(error)")
+                }
             }
         }
         // What do when the lyrics in a cell are being edited as opposed to a brand new line being added
