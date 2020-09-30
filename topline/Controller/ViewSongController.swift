@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class ViewSongController: UITableViewController, UITextFieldDelegate {
+class ViewSongController: UITableViewController, UITextViewDelegate {
     
     let realm = try! Realm()
     var song: Note? {
@@ -37,6 +37,13 @@ class ViewSongController: UITableViewController, UITextFieldDelegate {
         
         cell.lyricsField.tag = indexPath.row
         
+        if indexPath.row == 0 {
+            cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
+            cell.lyricsField.textColor = UIColor.lightGray
+            cell.lyricsField.text = "Song Title:"
+            cell.recordButton.isHidden = true
+        }
+        
         if indexPath.row < song!.lyrics.count {
             cell.lyricsField.text = song?.lyrics[indexPath.row].text
         }
@@ -44,20 +51,30 @@ class ViewSongController: UITableViewController, UITextFieldDelegate {
         return cell
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textFieldDidEndEditing(textField)
-        return true
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
         print("Text field ended editing")
+        
+        if textView.tag == 0 {
+            if textView.text.isEmpty {
+                textView.text = "Placeholder"
+                textView.textColor = UIColor.lightGray
+            }
+        }
         // What do when the lyrics in a cell are being edited as opposed to a brand new line being added
-        if song!.lyrics.count >= textField.tag + 1 {
+        if song!.lyrics.count >= textView.tag + 1 {
                 let updatedLyricLine = LyricLine()
-                updatedLyricLine.text = textField.text!
+                updatedLyricLine.text = textView.text!
                 do {
                     try realm.write {
-                        self.song!.lyrics[textField.tag] = updatedLyricLine
+                        self.song!.lyrics[textView.tag] = updatedLyricLine
                         print("Successfully updated existing lyric line in Realm")
                     }
                 } catch {
@@ -66,7 +83,7 @@ class ViewSongController: UITableViewController, UITextFieldDelegate {
             } else {
                 // When a brand new line of lyrics is being added and there are already other lines that exist
                 let newLyricLine = LyricLine()
-                newLyricLine.text = textField.text!
+                newLyricLine.text = textView.text!
                 do {
                     try self.realm.write {
                         self.song!.lyrics.append(newLyricLine)

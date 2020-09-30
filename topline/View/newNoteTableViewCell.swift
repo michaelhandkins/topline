@@ -9,7 +9,7 @@ import UIKit
 
 class newNoteTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var lyricsField: UITextField!
+    @IBOutlet weak var lyricsField: UITextView!
     @IBOutlet weak var recordButton: UIButton!
     
     override func awakeFromNib() {

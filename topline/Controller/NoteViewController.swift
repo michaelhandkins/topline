@@ -17,6 +17,8 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = ""
+        
         do {
             try realm.write {
                 realm.add(song)
@@ -30,25 +32,17 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        if lyrics == nil && song.title == "New Song" {
-            do {
-                try realm.write {
-                    realm.delete(self.song)
-                }
-            } catch {
-                print("Error when deleting song from Realm because user never entered title or lyrics: \(error)")
-            }
-        }
+       
     }
 
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
+
         if let safeLyrics = lyrics {
-            return safeLyrics.count + 1
+            return safeLyrics.count + 2
         } else {
-            return 1
+            return 2
         }
     }
 
@@ -59,6 +53,13 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         
         cell.lyricsField.tag = indexPath.row
         
+        if indexPath.row == 0 {
+            cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
+            cell.lyricsField.textColor = UIColor.lightGray
+            cell.lyricsField.text = "Song Title:"
+            cell.recordButton.isHidden = true
+        }
+        
         if let safeLyrics = lyrics {
             if indexPath.row < safeLyrics.count {
                 cell.lyricsField.text = safeLyrics[indexPath.row].text
@@ -67,27 +68,40 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
             }
         }
         
-        
-
         return cell
     }
+       
+}
+
+//MARK: - TextView Delegate Methods
+
+extension NoteViewController: UITextViewDelegate {
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textFieldDidEndEditing(textField)
-        return true
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    func textViewDidEndEditing(_ textView: UITextView) {
         print("Text field ended editing")
+        
+        if textView.tag == 0 {
+            if textView.text.isEmpty {
+                textView.text = "Placeholder"
+                textView.textColor = UIColor.lightGray
+            }
+        }
         // What do when the lyrics in a cell are being edited as opposed to a brand new line being added
         if let safeLyrics = lyrics {
-            if safeLyrics.count >= textField.tag + 1 {
+            if safeLyrics.count >= textView.tag + 1 {
                 let updatedLyricLine = LyricLine()
-                updatedLyricLine.text = textField.text!
-                safeLyrics[textField.tag] = updatedLyricLine
+                updatedLyricLine.text = textView.text!
+                safeLyrics[textView.tag] = updatedLyricLine
                 do {
                     try realm.write {
-                        self.song.lyrics[textField.tag] = updatedLyricLine
+                        self.song.lyrics[textView.tag] = updatedLyricLine
                         print("Successfully updated existing lyric line in Realm")
                     }
                 } catch {
@@ -96,7 +110,7 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
             } else {
                 // When a brand new line of lyrics is being added and there are already other lines that exist
                 let newLyricLine = LyricLine()
-                newLyricLine.text = textField.text!
+                newLyricLine.text = textView.text!
                 safeLyrics.append(newLyricLine)
                 do {
                     try self.realm.write {
@@ -111,7 +125,7 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
             // When the very first lyric line is being added to the song
             print("Attempting to add first line of lyrics to song")
             let newLyricLine = LyricLine()
-            newLyricLine.text = textField.text!
+            newLyricLine.text = textView.text!
             lyrics = List()
             lyrics?.append(newLyricLine)
             do {
@@ -130,3 +144,4 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
     }
 
 }
+
