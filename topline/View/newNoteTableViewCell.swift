@@ -6,13 +6,20 @@
 
 import UIKit
 import RealmSwift
+import AVFoundation
 
-class newNoteTableViewCell: UITableViewCell, UITextViewDelegate {
+class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     let realm = try! Realm()
 
     @IBOutlet weak var lyricsField: UITextView!
     @IBOutlet weak var recordButton: UIButton!
+    
+    var recorder = AVAudioRecorder()
+    var player = AVAudioPlayer()
+    var fileName: String = "audioFile.m4a"
+    var audioFileURL: URL?
+    var newRecording = Recording()
     
 //    var callback: ((String) -> ())?
     
@@ -20,15 +27,10 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate {
         super.didMoveToSuperview()
         // make sure scroll is disabled
         lyricsField.isScrollEnabled = false
+        setupRecorder()
 
 //        lyricsField.delegate = self
     }
-    
-//    func textViewDidChange(_ textView: UITextView) {
-//        let str = textView.text ?? ""
-//        // tell the controller
-//        callback?(str)
-//    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -40,8 +42,79 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate {
 
     }
     
+    //MARK: - AVAudioRecorder and Player Delegate Methods
+    
     @IBAction func recordButtonPressed(_ sender: UIButton) {
+        
+        if recordButton.currentImage == UIImage(systemName: "record.circle") {
+            recorder.record()
+            recordButton.setImage(UIImage(systemName: "record.circle.fill"), for: .normal)
+        } else if recordButton.currentImage == UIImage(systemName: "record.circle.fill") {
+            recorder.stop()
+            recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
+        } else if recordButton.currentImage == UIImage(systemName: "play.circle") {
+            setupPlayer()
+            player.play()
+            recordButton.setImage(UIImage(systemName: "stop.circle.fill"), for: .normal)
+        } else {
+            player.stop()
+            recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
+        }
+        
     }
+    
+    func getDocumentDirectory() -> URL {
+        
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+        
+    }
+    
+    func setupRecorder() {
+        
+        audioFileURL = getDocumentDirectory().appendingPathComponent(fileName)
+        
+        let recordSettings = [AVFormatIDKey : kAudioFormatAppleLossless,
+                              AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
+                              AVEncoderBitRateKey : 320000,
+                              AVNumberOfChannelsKey : 2,
+                              AVSampleRateKey : 44100.0] as [String : Any]
+        
+        do {
+            recorder = try AVAudioRecorder(url: self.audioFileURL!, settings: recordSettings)
+            recorder.delegate = self
+            recorder.prepareToRecord()
+        } catch {
+            print(error)
+        }
+        
+    }
+    
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
+        newRecording.audioFileString = fileName
+        
+    }
+    
+    func setupPlayer() {
+        
+        audioFileURL = getDocumentDirectory().appendingPathComponent(fileName)
+        
+        do {
+            player = try AVAudioPlayer(contentsOf: self.audioFileURL!)
+            player.delegate = self
+            player.prepareToPlay()
+            player.volume = 1.0
+        } catch {
+            print(error)
+        }
+        
+    }
+    
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
+    }
+    
     
     
 }

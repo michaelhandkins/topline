@@ -7,8 +7,9 @@
 
 import UIKit
 import RealmSwift
+import AVFoundation
 
-class NoteViewController: UITableViewController, UITextFieldDelegate {
+class NoteViewController: UITableViewController, UITextFieldDelegate, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
     let realm = try! Realm()
     var lyrics: List<LyricLine> = List()
@@ -54,6 +55,8 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lyricsCell", for: indexPath) as! newNoteTableViewCell
         
         cell.lyricsField.delegate = self
+        
+        cell.fileName = "audioFile\(indexPath.row).m4a"
         
         self.callback = { str in
             // update our data with the edited string
