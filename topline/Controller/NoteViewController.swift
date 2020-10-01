@@ -14,7 +14,8 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
     var lyrics: List<LyricLine>?
     var song: Note = Note()
     var songTitle: String?
-
+//    var myData: [String] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,9 +51,21 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lyricsCell", for: indexPath) as! newNoteTableViewCell
         
-        cell.lyricsField.delegate = self
+//        cell.callback = { str in
+//            // update our data with the edited string
+//            if self.myData.count > indexPath.row {
+//                self.myData[indexPath.row] = str
+//            } else {
+//                self.myData.append(str)
+//            }
+//            // we don't need to do anything else here
+//            // this will force the table to recalculate row heights
+//            tableView.performBatchUpdates(nil)
+//        }
         
         cell.lyricsField.tag = indexPath.row
+        
+        cell.lyricsField.delegate = self
         
         if indexPath.row == 0 && song.title == "Untitled" {
             cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
