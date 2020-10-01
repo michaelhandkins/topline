@@ -17,6 +17,7 @@ class NoteViewController: UITableViewController, UITextFieldDelegate, AVAudioRec
     var songTitle: String?
     var myData: [String] = []
     var callback: ((String) -> ())?
+    var recordings: Results<Recording>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +41,10 @@ class NoteViewController: UITableViewController, UITextFieldDelegate, AVAudioRec
     }
 
     // MARK: - Table view data source
+    
+    func loadRecordings() {
+        
+    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 

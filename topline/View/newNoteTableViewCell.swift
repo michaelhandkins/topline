@@ -17,9 +17,9 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     
     var recorder = AVAudioRecorder()
     var player = AVAudioPlayer()
-    var fileName: String = "audioFile.m4a"
+    var fileName: String?
     var audioFileURL: URL?
-    var newRecording = Recording()
+    var hasRecording = false
     
 //    var callback: ((String) -> ())?
     
@@ -52,6 +52,7 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
         } else if recordButton.currentImage == UIImage(systemName: "record.circle.fill") {
             recorder.stop()
             recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
+            self.hasRecording = true
         } else if recordButton.currentImage == UIImage(systemName: "play.circle") {
             setupPlayer()
             player.play()
@@ -72,7 +73,11 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     
     func setupRecorder() {
         
-        audioFileURL = getDocumentDirectory().appendingPathComponent(fileName)
+        if let safeFileName = fileName {
+            audioFileURL = getDocumentDirectory().appendingPathComponent(safeFileName)
+        } else {
+            return
+        }
         
         let recordSettings = [AVFormatIDKey : kAudioFormatAppleLossless,
                               AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
@@ -92,13 +97,18 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
-        newRecording.audioFileString = fileName
         
+        if let safeFileName = fileName {
+            let newRecording = Recording()
+            newRecording.audioFileString = safeFileName
+        }
     }
     
     func setupPlayer() {
         
-        audioFileURL = getDocumentDirectory().appendingPathComponent(fileName)
+        if let safeFileName = fileName {
+            audioFileURL = getDocumentDirectory().appendingPathComponent(safeFileName)
+        }
         
         do {
             player = try AVAudioPlayer(contentsOf: self.audioFileURL!)
