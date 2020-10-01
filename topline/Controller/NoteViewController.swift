@@ -11,7 +11,7 @@ import RealmSwift
 class NoteViewController: UITableViewController, UITextFieldDelegate {
     
     let realm = try! Realm()
-    var lyrics: List<LyricLine>?
+    var lyrics: List<LyricLine> = List()
     var song: Note = Note()
     var songTitle: String?
     var myData: [String] = []
@@ -42,11 +42,12 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        if let safeLyrics = lyrics {
-            return safeLyrics.count + 2
-        } else {
-            return 2
-        }
+//        if let safeLyrics = lyrics {
+//            return safeLyrics.count + 2
+//        } else {
+//            return 2
+//        }
+        return lyrics.count + 2
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -56,8 +57,10 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
         
         self.callback = { str in
             // update our data with the edited string
-            if self.myData.count > indexPath.row {
-                self.myData[indexPath.row] = str
+            if self.myData.count > 0 && indexPath.row > 0 && self.myData.count >= indexPath.row {
+                self.myData[indexPath.row - 1] = str
+            } else if indexPath.row == 0 {
+                self.song.title = str
             } else {
                 self.myData.append(str)
             }
@@ -75,15 +78,13 @@ class NoteViewController: UITableViewController, UITextFieldDelegate {
             cell.recordButton.isHidden = true
         }
         
-        if let safeLyrics = lyrics {
-            if indexPath.row < safeLyrics.count && indexPath.row != 0 {
-                cell.lyricsField.text = safeLyrics[indexPath.row].text
-            } else if indexPath.row >= safeLyrics.count && indexPath.row != 0 {
+            if indexPath.row <= lyrics.count && indexPath.row != 0 {
+                cell.lyricsField.text = lyrics[indexPath.row - 1].text
+            } else if indexPath.row > lyrics.count && indexPath.row != 0 {
                 cell.lyricsField.text = ""
             } else if indexPath.row == 0 && song.title != "Untitled" {
                 cell.lyricsField.text = song.title
             }
-        }
         
         return cell
     }
@@ -110,7 +111,7 @@ extension NoteViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         print("Text field ended editing")
-        
+
         if textView.tag == 0 {
             if textView.text.isEmpty {
                 textView.text = "Song Title:"
@@ -133,55 +134,34 @@ extension NoteViewController: UITextViewDelegate {
                     print("Error when updating song title in Realm to user inputted text: \(error)")
                 }
             }
-        }
-        // What do when the lyrics in a cell are being edited as opposed to a brand new line being added
-        if let safeLyrics = lyrics {
-            if safeLyrics.count >= textView.tag + 1 {
-                let updatedLyricLine = LyricLine()
-                updatedLyricLine.text = textView.text!
-                safeLyrics[textView.tag] = updatedLyricLine
+        } else {
+            if lyrics.count >= textView.tag {
+                let updatedLine = LyricLine()
+                updatedLine.text = textView.text
+                lyrics[textView.tag - 1] = updatedLine
                 do {
                     try realm.write {
-                        self.song.lyrics[textView.tag] = updatedLyricLine
-                        print("Successfully updated existing lyric line in Realm")
+                        self.song.lyrics[textView.tag - 1] = updatedLine
                     }
                 } catch {
-                    print("Error updating the lyrics for song in Realm: \(error)")
+                    print("Error when updating lyric line to song in Realm: \(error)")
                 }
             } else {
-                // When a brand new line of lyrics is being added and there are already other lines that exist
-                let newLyricLine = LyricLine()
-                newLyricLine.text = textView.text!
-                safeLyrics.append(newLyricLine)
+                let newLine = LyricLine()
+                newLine.text = textView.text
+                lyrics.append(newLine)
                 do {
-                    try self.realm.write {
-                        self.song.lyrics.append(newLyricLine)
-                        print("Lyrics successfully added to song as a new line in Realm")
+                    try realm.write {
+                        self.song.lyrics.append(newLine)
                     }
                 } catch {
-                    print("Error when updating song lyrics in Realm: \(error)")
+                    print("Error when adding new lyric line to song in Realm: \(error)")
                 }
             }
-        } else {
-            // When the very first lyric line is being added to the song
-            print("Attempting to add first line of lyrics to song")
-            let newLyricLine = LyricLine()
-            newLyricLine.text = textView.text!
-            lyrics = List()
-            lyrics?.append(newLyricLine)
-            do {
-                try self.realm.write {
-                    self.song.lyrics.append(newLyricLine)
-                    print("First line of lyrics successfully added to song in Realm")
-                }
-            } catch {
-                print("Error when updating song lyrics in Realm: \(error)")
-            }
-            
         }
         
         tableView.reloadData()
-        
+
     }
 
 }

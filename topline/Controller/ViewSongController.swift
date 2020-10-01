@@ -30,7 +30,7 @@ class ViewSongController: UITableViewController, UITextViewDelegate {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return song!.lyrics.count + 1
+        return song!.lyrics.count + 2
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
