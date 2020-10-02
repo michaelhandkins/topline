@@ -44,10 +44,6 @@ class NoteViewController: UITableViewController, UITextFieldDelegate, AVAudioRec
     }
 
     // MARK: - Table view data source
-    
-    func loadRecordings() {
-        
-    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
