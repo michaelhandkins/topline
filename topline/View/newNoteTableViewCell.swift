@@ -20,6 +20,7 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     var fileName: String?
     var audioFileURL: URL?
     var hasRecording = false
+    var newRecording = Recording()
     
 //    var callback: ((String) -> ())?
     
@@ -28,7 +29,6 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
         // make sure scroll is disabled
         lyricsField.isScrollEnabled = false
         setupRecorder()
-
 //        lyricsField.delegate = self
     }
     
@@ -97,11 +97,7 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
-        
-        if let safeFileName = fileName {
-            let newRecording = Recording()
-            newRecording.audioFileString = safeFileName
-        }
+            
     }
     
     func setupPlayer() {
@@ -124,7 +120,6 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
     }
-    
     
     
 }

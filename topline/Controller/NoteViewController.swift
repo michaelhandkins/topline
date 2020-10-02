@@ -19,10 +19,13 @@ class NoteViewController: UITableViewController, UITextFieldDelegate, AVAudioRec
     var callback: ((String) -> ())?
     var recordings: Results<Recording>?
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = ""
+        song.id = realm.objects(Note.self).count
         
         do {
             try realm.write {
@@ -61,7 +64,18 @@ class NoteViewController: UITableViewController, UITextFieldDelegate, AVAudioRec
         
         cell.lyricsField.delegate = self
         
-        cell.fileName = "audioFile\(indexPath.row).m4a"
+        if indexPath.row != 0 {
+            cell.fileName = "song\(song.id)recording\(indexPath.row).m4a"
+            
+            do {
+                try realm.write {
+                    song.recordings.append(cell.fileName!)
+                }
+            } catch {
+                print("Error while trying to add recording file name to song in realm: \(error)")
+            }
+            
+        }
         
         self.callback = { str in
             // update our data with the edited string
@@ -173,4 +187,3 @@ extension NoteViewController: UITextViewDelegate {
     }
 
 }
-

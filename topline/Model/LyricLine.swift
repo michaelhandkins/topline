@@ -12,7 +12,6 @@ import RealmSwift
 class LyricLine: Object {
     @objc dynamic var text: String = ""
     var parent = LinkingObjects(fromType: Note.self, property: "lyrics")
-    let audio: Recording? = Recording()
 }
 
 

@@ -11,6 +11,8 @@ import RealmSwift
 class Note: Object {
     
     @objc dynamic var title: String = "Untitled"
+    @objc dynamic var id: Int = 0
     let lyrics = List<LyricLine>()
+    let recordings = List<String>()
     
 }
