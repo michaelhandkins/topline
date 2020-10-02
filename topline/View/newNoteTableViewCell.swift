@@ -79,6 +79,13 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
             return
         }
         
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: [.defaultToSpeaker])
+        } catch let error as NSError {
+            print(error.description)
+        }
+        
         let recordSettings = [AVFormatIDKey : kAudioFormatAppleLossless,
                               AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
                               AVEncoderBitRateKey : 320000,
