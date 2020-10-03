@@ -48,8 +48,6 @@ class ViewSongController: UITableViewController, UITextViewDelegate {
         let fileName = "song\(song!.id)recording\(indexPath.row).m4a"
         cell.fileName = fileName
         
-        cell.newRecording = song!.recordings[indexPath.row - 1]
-        
         self.callback = { str in
             // update our data with the edited string
             if self.myData.count > 0 && indexPath.row > 0 && self.myData.count >= indexPath.row {

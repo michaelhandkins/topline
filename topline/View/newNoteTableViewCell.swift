@@ -17,18 +17,21 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     
     var recorder = AVAudioRecorder()
     var player = AVAudioPlayer()
-    var fileName: String?
-    var audioFileURL: URL?
-    var hasRecording = false
-    var newRecording: String?
-    
-//    var callback: ((String) -> ())?
+    var fileName: String? {
+        didSet {
+            audioFileURL = getDocumentDirectory().appendingPathComponent(fileName!)
+        }
+    }
+    var audioFileURL: URL? {
+        didSet {
+            setupRecorder()
+        }
+    }
     
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         // make sure scroll is disabled
         lyricsField.isScrollEnabled = false
-        setupRecorder()
     }
     
     override func awakeFromNib() {
@@ -44,14 +47,12 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     //MARK: - AVAudioRecorder and Player Delegate Methods
     
     @IBAction func recordButtonPressed(_ sender: UIButton) {
-        
         if recordButton.currentImage == UIImage(systemName: "record.circle") {
             recorder.record()
             recordButton.setImage(UIImage(systemName: "record.circle.fill"), for: .normal)
         } else if recordButton.currentImage == UIImage(systemName: "record.circle.fill") {
             recorder.stop()
             recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
-            self.hasRecording = true
         } else if recordButton.currentImage == UIImage(systemName: "play.circle") {
             setupPlayer()
             player.play()
@@ -60,25 +61,14 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
             player.stop()
             recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
         }
-        
     }
     
     func getDocumentDirectory() -> URL {
-        
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
-        
     }
     
     func setupRecorder() {
-        
-        if let safeFileName = fileName {
-            audioFileURL = getDocumentDirectory().appendingPathComponent(safeFileName)
-            newRecording = audioFileURL?.absoluteString ?? nil
-        } else {
-            return
-        }
-        
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(AVAudioSession.Category.playAndRecord, options: [.defaultToSpeaker])
@@ -99,16 +89,17 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
         } catch {
             print(error)
         }
-        
     }
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
         print(recorder.url.absoluteString)
+        //A new Recording object is created to store the fileName and audioFileURL
         let newRecording = Recording()
         if let safeFileName = fileName {
             newRecording.audioFileName = safeFileName
             newRecording.urlString = recorder.url.absoluteString
+            //The Recording is then added to realm
             do {
                 try realm.write {
                     realm.add(newRecording)
@@ -118,29 +109,24 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
                 print("Error when adding new Recording to realm: \(error)")
             }
         }
-        
     }
     
     func setupPlayer() {
-        
-        if let safeFileName = fileName {
-            audioFileURL = getDocumentDirectory().appendingPathComponent(safeFileName)
+        if let safeURL = audioFileURL {
+            do {
+                player = try AVAudioPlayer(contentsOf: safeURL)
+                print("Player set up to use the cell's audio URL")
+                player.delegate = self
+                player.prepareToPlay()
+                player.volume = 1.0
+            } catch {
+                print(error)
+            }
         }
-        
-        do {
-            player = try AVAudioPlayer(contentsOf: self.audioFileURL!)
-            player.delegate = self
-            player.prepareToPlay()
-            player.volume = 1.0
-        } catch {
-            print(error)
-        }
-        
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
     }
-    
     
 }

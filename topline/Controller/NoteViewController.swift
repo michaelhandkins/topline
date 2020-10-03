@@ -78,10 +78,13 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
                 
                 if safeRecordings.contains(where: {$0.audioFileName == cell.fileName}) {
                     print("A corresponding recording is present")
+                    cell.recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
+                    if let recordingForCell = safeRecordings.filter("urlString CONTAINS[cd] %@", cell.fileName!).first {
+                        print(recordingForCell.urlString)
+                        cell.audioFileURL = URL(string: recordingForCell.urlString)
+                    }
                 }
-                
             }
-            
         }
         
         //Enables the dynamic cell height which fits the text of the text view
