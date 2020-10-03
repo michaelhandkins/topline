@@ -9,5 +9,6 @@ import Foundation
 import RealmSwift
 
 class Recording: Object {
-    @objc dynamic var audioFileString: String = ""
+    @objc dynamic var audioFileName: String = ""
+    @objc dynamic var urlString: String = ""
 }

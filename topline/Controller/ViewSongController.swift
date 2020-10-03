@@ -48,10 +48,7 @@ class ViewSongController: UITableViewController, UITextViewDelegate {
         let fileName = "song\(song!.id)recording\(indexPath.row).m4a"
         cell.fileName = fileName
         
-        //This should cause the player to find the URL path for the cell's fileName, but instead an error is received
-//        if song!.recordings.contains(fileName) {
-//            cell.recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
-//        }
+        cell.newRecording = song!.recordings[indexPath.row - 1]
         
         self.callback = { str in
             // update our data with the edited string

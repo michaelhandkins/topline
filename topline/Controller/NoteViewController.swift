@@ -19,8 +19,6 @@ class NoteViewController: UITableViewController, UITextFieldDelegate, AVAudioRec
     var callback: ((String) -> ())?
     var recordings: Results<Recording>?
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,19 +56,8 @@ class NoteViewController: UITableViewController, UITextFieldDelegate, AVAudioRec
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lyricsCell", for: indexPath) as! newNoteTableViewCell
         
-        cell.lyricsField.delegate = self
-        
         if indexPath.row != 0 {
             cell.fileName = "song\(song.id)recording\(indexPath.row).m4a"
-            
-            do {
-                try realm.write {
-                    song.recordings.append(cell.fileName!)
-                }
-            } catch {
-                print("Error while trying to add recording file name to song in realm: \(error)")
-            }
-            
         }
         
         self.callback = { str in
@@ -181,5 +168,7 @@ extension NoteViewController: UITextViewDelegate {
         tableView.reloadData()
 
     }
-
+    
 }
+
+

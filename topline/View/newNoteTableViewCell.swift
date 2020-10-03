@@ -20,7 +20,7 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     var fileName: String?
     var audioFileURL: URL?
     var hasRecording = false
-    var newRecording = Recording()
+    var newRecording: String?
     
 //    var callback: ((String) -> ())?
     
@@ -29,7 +29,7 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
         // make sure scroll is disabled
         lyricsField.isScrollEnabled = false
         setupRecorder()
-//        lyricsField.delegate = self
+        lyricsField.delegate = self
     }
     
     override func awakeFromNib() {
@@ -75,6 +75,7 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
         
         if let safeFileName = fileName {
             audioFileURL = getDocumentDirectory().appendingPathComponent(safeFileName)
+            newRecording = audioFileURL?.absoluteString ?? nil
         } else {
             return
         }
@@ -104,7 +105,20 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
-            
+        print(recorder.url.absoluteString)
+        let newRecording = Recording()
+        if let safeFileName = fileName {
+            newRecording.audioFileName = safeFileName
+            newRecording.urlString = recorder.url.absoluteString
+            do {
+                try realm.write {
+                    realm.add(newRecording)
+                }
+            } catch {
+                print("Error when adding new Recording to realm: \(error)")
+            }
+        }
+        
     }
     
     func setupPlayer() {
