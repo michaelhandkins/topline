@@ -101,6 +101,8 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         //Fills in the title of the song if one is present
         } else if indexPath.row == 0 && song.title != "Untitled" {
             cell.lyricsField.text = song.title
+            cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
+            cell.recordButton.isHidden = true
         }
         
         return cell
