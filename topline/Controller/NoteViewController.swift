@@ -13,7 +13,12 @@ class NoteViewController: UITableViewController, UITextFieldDelegate, AVAudioRec
     
     let realm = try! Realm()
     var lyrics: List<LyricLine> = List()
-    var song: Note = Note()
+    var song: Note = Note() {
+        didSet {
+            songWasSet = true
+        }
+    }
+    var songWasSet: Bool = false
     var songTitle: String?
     var myData: [String] = []
     var callback: ((String) -> ())?

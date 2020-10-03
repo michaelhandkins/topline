@@ -76,13 +76,12 @@ class ViewSongController: UITableViewController, UITextViewDelegate {
         if indexPath.row <= song!.lyrics.count && indexPath.row != 0 {
             cell.lyricsField.text = song!.lyrics[indexPath.row - 1].text
         } else if indexPath.row > song!.lyrics.count && indexPath.row != 0 {
-                cell.lyricsField.text = ""
-            } else if indexPath.row == 0 && song!.title != "Untitled" {
-                cell.lyricsField.text = song!.title
-                cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
-                cell.recordButton.isHidden = true
-                
-            }
+            cell.lyricsField.text = ""
+        } else if indexPath.row == 0 && song!.title != "Untitled" {
+            cell.lyricsField.text = song!.title
+            cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
+            cell.recordButton.isHidden = true
+        }
         
         return cell
     }

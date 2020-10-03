@@ -113,6 +113,7 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
             do {
                 try realm.write {
                     realm.add(newRecording)
+                    print("New recording added to Realm")
                 }
             } catch {
                 print("Error when adding new Recording to realm: \(error)")
