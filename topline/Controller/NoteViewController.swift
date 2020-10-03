@@ -73,6 +73,15 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         //Creating the audio file name for the recording of each cell except the first, which is for the title of the song
         if indexPath.row != 0 {
             cell.fileName = "song\(song.id)recording\(indexPath.row).m4a"
+            
+            if let safeRecordings = recordings {
+                
+                if safeRecordings.contains(where: {$0.audioFileName == cell.fileName}) {
+                    print("A corresponding recording is present")
+                }
+                
+            }
+            
         }
         
         //Enables the dynamic cell height which fits the text of the text view
