@@ -62,18 +62,17 @@ class HomeViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedSong = songs![indexPath.row]
-        performSegue(withIdentifier: "toSongSegue", sender: self)
+        performSegue(withIdentifier: "toNoteSegue", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "toNoteSegue" {
-            let vc = segue.destination as! NoteViewController
-        } else {
-            let vc = segue.destination as! ViewSongController
-            vc.song = selectedSong
+
+        let vc = segue.destination as! NoteViewController
+        if let songForVC = selectedSong {
+            vc.song = songForVC
         }
     }
+    
     
 
 }

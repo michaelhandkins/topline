@@ -29,7 +29,6 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
         // make sure scroll is disabled
         lyricsField.isScrollEnabled = false
         setupRecorder()
-        lyricsField.delegate = self
     }
     
     override func awakeFromNib() {
