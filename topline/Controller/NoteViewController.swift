@@ -21,10 +21,15 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     var songTitle: String?
     var myData: [String] = []
     var callback: ((String) -> ())?
-    var recordings: Results<Recording>?
+    var recordings: Results<Recording>? {
+        didSet {
+            print("Recordings loaded")
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadRecordings()
         
         print(songWasSet)
         
@@ -106,6 +111,10 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         }
         
         return cell
+    }
+    
+    func loadRecordings() {
+        recordings = realm.objects(Recording.self)
     }
        
 }
