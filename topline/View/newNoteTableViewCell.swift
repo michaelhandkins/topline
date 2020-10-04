@@ -22,16 +22,19 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
             audioFileURL = getDocumentDirectory().appendingPathComponent(fileName!)
         }
     }
-    var audioFileURL: URL? {
-        didSet {
-            setupRecorder()
-        }
+    var audioFileURL: URL?
+    
+    var recordings: Results<Recording>?
+    
+    func loadRecordings() {
+        recordings = realm.objects(Recording.self)
     }
     
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         // make sure scroll is disabled
         lyricsField.isScrollEnabled = false
+        loadRecordings()
     }
     
     override func awakeFromNib() {
@@ -48,7 +51,8 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     
     @IBAction func recordButtonPressed(_ sender: UIButton) {
         if recordButton.currentImage == UIImage(systemName: "record.circle") {
-            recorder.record()
+//            recorder.record()
+            recorder = AVAudioSession.sharedInstance().startRecording(for: audioFileURL!, with: self)!
             recordButton.setImage(UIImage(systemName: "record.circle.fill"), for: .normal)
         } else if recordButton.currentImage == UIImage(systemName: "record.circle.fill") {
             recorder.stop()
@@ -98,7 +102,7 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
         let newRecording = Recording()
         if let safeFileName = fileName {
             newRecording.audioFileName = safeFileName
-            newRecording.urlString = recorder.url.absoluteString
+//            newRecording.urlString = recorder.url.absoluteString
             //The Recording is then added to realm
             do {
                 try realm.write {
@@ -112,8 +116,15 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     }
     
     func setupPlayer() {
+        
         if let safeURL = audioFileURL {
             do {
+                
+                let session = AVAudioSession.sharedInstance()
+                
+                try session.setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default)
+                try session.setActive(true)
+                
                 player = try AVAudioPlayer(contentsOf: safeURL)
                 print("Player set up to use the cell's audio URL")
                 player.delegate = self
