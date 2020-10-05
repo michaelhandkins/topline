@@ -10,6 +10,10 @@ import AVFoundation
 
 class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
+    
+    @IBOutlet weak var addLineButton: UIBarButtonItem!
+    
+    
     let realm = try! Realm()
     var songWasSet: Bool = false
     var song: Note = Note() {
@@ -26,8 +30,14 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.toolbar.isHidden = false
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         loadRecordings()
         
         print(songWasSet)

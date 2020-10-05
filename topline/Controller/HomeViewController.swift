@@ -25,6 +25,7 @@ class HomeViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.toolbar.isHidden = true
         loadSongs()
         selectedSong = nil
         addButtonPressed = false
@@ -68,6 +69,7 @@ class HomeViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         let vc = segue.destination as! NoteViewController
+        vc.hidesBottomBarWhenPushed = false
         if let songForVC = selectedSong {
             vc.song = songForVC
         }

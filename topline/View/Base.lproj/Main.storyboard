@@ -37,6 +37,7 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <segue destination="aBn-Gq-wO3" kind="show" identifier="toNoteSegue" id="phk-vF-4dC"/>
                         <segue destination="SRE-nI-Uy4" kind="show" identifier="toSongSegue" id="T4h-9D-6p2"/>
@@ -51,7 +52,7 @@
             <objects>
                 <tableViewController id="aBn-Gq-wO3" customClass="NoteViewController" customModule="topline" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mMC-8V-cW6">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <connections>
@@ -59,6 +60,17 @@
                             <outlet property="delegate" destination="aBn-Gq-wO3" id="wET-d8-glo"/>
                         </connections>
                     </tableView>
+                    <toolbarItems>
+                        <barButtonItem systemItem="add" id="CiV-Kg-5lb">
+                            <connections>
+                                <action selector="addLineButtonPressed:" destination="aBn-Gq-wO3" id="96V-jH-s90"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
+                    <connections>
+                        <outlet property="addLineButton" destination="CiV-Kg-5lb" id="Y7U-ld-Sxh"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F71-Ao-By3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -67,13 +79,18 @@
         <!--Navigation Controller-->
         <scene sceneID="1FL-KH-RMT">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="9sf-YW-6ht" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" hidesBottomBarWhenPushed="YES" toolbarHidden="NO" id="9sf-YW-6ht" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="7nk-Vn-uP5">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="qmu-4e-dxF">
+                        <rect key="frame" x="0.0" y="813" width="414" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="Yal-NP-NZ3" kind="relationship" relationship="rootViewController" id="WHA-QM-7Lk"/>
                     </connections>
