@@ -159,24 +159,22 @@ extension NoteViewController: UITextViewDelegate {
             textView.textColor = UIColor(named: "darkModeBlack")
         }
         
-        if textView.tag == song.lyrics.count {
-            let newLyricLine = LyricLine()
-            newLyricLine.text = ""
-            do {
-                try realm.write {
-                    self.song.lyrics.append(newLyricLine)
-                }
-            } catch {
-                print("Error when adding a new lyric line to the song upon the previous blank line being selected")
-            }
-            tableView.reloadData()
-        }
-        
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if(text == "\n") {
             textView.endEditing(true)
+            let newLyricLine = LyricLine()
+            newLyricLine.text = ""
+            do {
+                try realm.write {
+                    self.song.lyrics.insert(newLyricLine, at: textView.tag)
+                    print("Successfully inserted new lyric line in Realm")
+                }
+            } catch {
+                print("Error when inserting new lyric line after pressing return")
+            }
+            tableView.reloadData()
             return false
         } else {
             return true
