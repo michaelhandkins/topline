@@ -164,6 +164,15 @@ extension NoteViewController: UITextViewDelegate {
         
     }
     
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if(text == "\n") {
+            textView.endEditing(true)
+            return false
+        } else {
+            return true
+        }
+    }
+    
     func textViewDidEndEditing(_ textView: UITextView) {
         print("Text field ended editing")
 
