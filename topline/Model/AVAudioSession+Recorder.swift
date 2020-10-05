@@ -9,7 +9,7 @@ import AVFoundation
 
 extension AVAudioSession {
     
-    func startRecording(for file:URL, with delegate:AVAudioRecorderDelegate?) -> AVAudioRecorder? {
+    func startRecording(for file: URL, with delegate:AVAudioRecorderDelegate?) -> AVAudioRecorder? {
         
         if AVAudioSession.sharedInstance().recordPermission == .granted {
             

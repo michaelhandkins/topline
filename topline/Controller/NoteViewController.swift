@@ -4,7 +4,6 @@
 //
 //  Created by Michael Handkins on 9/27/20.
 //
-
 import UIKit
 import RealmSwift
 import AVFoundation
@@ -55,7 +54,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     }
 
     // MARK: - Table view data source
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
 //        if let safeLyrics = lyrics {
@@ -132,7 +130,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
 }
 
 //MARK: - TextView Delegate Methods
-
 extension NoteViewController: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
@@ -206,5 +203,4 @@ extension NoteViewController: UITextViewDelegate {
     }
     
 }
-
 
