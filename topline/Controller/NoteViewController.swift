@@ -143,7 +143,7 @@ extension NoteViewController: UITextViewDelegate {
         print("Text editing began")
         if textView.textColor == UIColor.lightGray {
             textView.text = nil
-            textView.textColor = UIColor.black
+            textView.textColor = UIColor(named: "darkModeBlack")
         }
     }
     
