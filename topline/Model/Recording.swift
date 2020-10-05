@@ -10,5 +10,5 @@ import RealmSwift
 
 class Recording: Object {
     @objc dynamic var audioFileName: String = ""
-//    @objc dynamic var urlString: String = ""
+    @objc dynamic var date = Date()
 }

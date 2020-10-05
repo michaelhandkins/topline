@@ -35,11 +35,15 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         title = ""
         
         if songWasSet == false {
-            song.id = realm.objects(Note.self).count
+            let firstLyricLine = LyricLine()
+            firstLyricLine.text = ""
+            firstLyricLine.date = Date()
             do {
                 try realm.write {
                     realm.add(song)
                     print("Successfully added new song to Realm for the first time")
+                    self.song.lyrics.append(firstLyricLine)
+                    print("First lyric line added to song in Realm when the cells loaded.")
                 }
             } catch {
                 print("Error when adding new song to Realm: \(error)")
@@ -61,7 +65,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
 //        } else {
 //            return 2
 //        }
-        return song.lyrics.count + 2
+        return song.lyrics.count + 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -69,21 +73,19 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         
         cell.lyricsField.delegate = self
         //Creating the audio file name for the recording of each cell except the first, which is for the title of the song
-        if indexPath.row != 0 {
-            cell.fileName = "song\(song.id)recording\(indexPath.row).caf"
+        
+        if indexPath.row > 0 {
+            cell.date = song.lyrics[indexPath.row - 1].date
+            cell.fileName = "song\(song.id)recording\(cell.date).caf"
         }
             
-            if let safeRecordings = recordings {
-                
-                if safeRecordings.contains(where: {$0.audioFileName == cell.fileName}) {
-                    print("A corresponding recording is present")
-                    cell.recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
-//                    if let recordingForCell = safeRecordings.filter("urlString CONTAINS[cd] %@", cell.fileName!).first {
-////                        print(recordingForCell.urlString)
-////                        cell.audioFileURL = URL(string: recordingForCell.urlString)
-//                    }
-                }
+        if let safeRecordings = recordings {
+            
+            if safeRecordings.contains(where: {$0.audioFileName == cell.fileName}) {
+                print("A corresponding recording is present")
+                cell.recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
             }
+        }
         
         //Enables the dynamic cell height which fits the text of the text view
         self.callback = { str in
@@ -110,6 +112,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         //Populates the cell with the lyrics that belong to it
         if indexPath.row <= song.lyrics.count && indexPath.row != 0 {
             cell.lyricsField.text = song.lyrics[indexPath.row - 1].text
+            cell.date = song.lyrics[indexPath.row - 1].date
         //Makes the cell have an empty string if no lyrics have been added to it yet
         } else if indexPath.row > song.lyrics.count && indexPath.row != 0 {
             cell.lyricsField.text = ""
@@ -145,6 +148,20 @@ extension NoteViewController: UITextViewDelegate {
             textView.text = nil
             textView.textColor = UIColor(named: "darkModeBlack")
         }
+        
+        if textView.tag == song.lyrics.count {
+            let newLyricLine = LyricLine()
+            newLyricLine.text = ""
+            do {
+                try realm.write {
+                    self.song.lyrics.append(newLyricLine)
+                }
+            } catch {
+                print("Error when adding a new lyric line to the song upon the previous blank line being selected")
+            }
+            tableView.reloadData()
+        }
+        
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -176,6 +193,7 @@ extension NoteViewController: UITextViewDelegate {
             if song.lyrics.count >= textView.tag {
                 let updatedLine = LyricLine()
                 updatedLine.text = textView.text
+                updatedLine.date = song.lyrics[textView.tag - 1].date
                 do {
                     try self.realm.write {
                         self.song.lyrics[textView.tag - 1] = updatedLine

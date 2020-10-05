@@ -17,12 +17,11 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     var recorder = AVAudioRecorder()
     var player = AVAudioPlayer()
     var fileName: String = "recording.m4a"
-    
     var recordings: Results<Recording>?
-    
     func loadRecordings() {
         recordings = realm.objects(Recording.self)
     }
+    var date = Date()
     
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
@@ -103,6 +102,7 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
         //A new Recording object is created to store the fileName and audioFileURL
         let newRecording = Recording()
         newRecording.audioFileName = fileName
+        newRecording.date = self.date
         //            newRecording.urlString = recorder.url.absoluteString
         //The Recording is then added to realm
         do {
