@@ -247,7 +247,7 @@ extension NoteViewController: UITextViewDelegate {
             }
         }
         
-        tableView.reloadData()
+//        tableView.reloadData()
 
     }
     
