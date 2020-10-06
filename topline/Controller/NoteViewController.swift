@@ -12,7 +12,11 @@ import SwipeCellKit
 class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
     
+    
+    @IBOutlet weak var doneButton: UIBarButtonItem!
     @IBOutlet weak var addLineButton: UIBarButtonItem!
+    
+    
     
     @IBOutlet weak var addButton: UIBarButtonItem!
     var cellCreatedWithReturn: Int?
@@ -45,6 +49,21 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         tableView.reloadData()
     }
     
+    @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
+        cellCreatedWithReturn = nil
+        tableView.reloadData()
+    }
+    
+    func hideNavigationButton() {
+        doneButton.isEnabled = false
+        doneButton.tintColor = UIColor.clear
+    }
+    
+    func showNavigationButton() {
+        doneButton.isEnabled = true
+        doneButton.tintColor = UIColor.systemIndigo
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.toolbar.isHidden = false
@@ -53,6 +72,8 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.navigationBar.tintColor = UIColor.systemIndigo
         
         loadRecordings()
         
@@ -97,6 +118,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lyricsCell", for: indexPath) as! newNoteTableViewCell
         
+        hideNavigationButton()
         cell.deleteButton.isHidden = true
         
         cell.lyricsField.delegate = self
@@ -184,6 +206,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             }
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
+        tableView.reloadData()
     }
     
     func loadRecordings() {
@@ -204,6 +227,8 @@ extension NoteViewController: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         cellCreatedWithReturn = nil
+        showNavigationButton()
+        
         print("Text editing began")
         if textView.textColor == UIColor.lightGray {
             textView.text = nil

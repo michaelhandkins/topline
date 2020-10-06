@@ -7,7 +7,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Notes-->
+        <!--Songs-->
         <scene sceneID="Oq8-DH-sEa">
             <objects>
                 <tableViewController id="Yal-NP-NZ3" customClass="HomeViewController" customModule="topline" customModuleProvider="target" sceneMemberID="viewController">
@@ -30,8 +30,9 @@
                             <outlet property="delegate" destination="Yal-NP-NZ3" id="aa8-te-xUs"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Notes" id="acv-Sh-zGY">
+                    <navigationItem key="navigationItem" title="Songs" id="acv-Sh-zGY">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="z4p-UW-MXl">
+                            <color key="tintColor" systemColor="systemIndigoColor"/>
                             <connections>
                                 <action selector="addButtonPressed:" destination="Yal-NP-NZ3" id="g6x-NL-SsQ"/>
                             </connections>
@@ -40,7 +41,6 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <segue destination="aBn-Gq-wO3" kind="show" identifier="toNoteSegue" id="phk-vF-4dC"/>
-                        <segue destination="SRE-nI-Uy4" kind="show" identifier="toSongSegue" id="T4h-9D-6p2"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bYN-wc-yj0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -50,7 +50,7 @@
         <!--Note View Controller-->
         <scene sceneID="tAv-c8-ulq">
             <objects>
-                <tableViewController id="aBn-Gq-wO3" customClass="NoteViewController" customModule="topline" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="aBn-Gq-wO3" userLabel="Note View Controller" customClass="NoteViewController" customModule="topline" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mMC-8V-cW6">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -62,20 +62,31 @@
                     </tableView>
                     <toolbarItems>
                         <barButtonItem systemItem="add" id="CiV-Kg-5lb">
+                            <color key="tintColor" systemColor="systemIndigoColor"/>
                             <connections>
                                 <action selector="addButtonPressed:" destination="aBn-Gq-wO3" id="C3x-aj-Ixj"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
+                    <navigationItem key="navigationItem" title="Title" id="NCa-y0-sMd">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="dgo-Ck-Yoo">
+                            <color key="tintColor" systemColor="systemIndigoColor"/>
+                            <connections>
+                                <action selector="doneButtonPressed:" destination="aBn-Gq-wO3" id="9l2-Pv-9ZM"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
                         <outlet property="addButton" destination="CiV-Kg-5lb" id="HOk-3z-7yv"/>
                         <outlet property="addLineButton" destination="CiV-Kg-5lb" id="Y7U-ld-Sxh"/>
+                        <outlet property="doneButton" destination="dgo-Ck-Yoo" id="OKM-as-PFq"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F71-Ao-By3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1394.2028985507247" y="-353.57142857142856"/>
+            <point key="canvasLocation" x="1423" y="-40"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1FL-KH-RMT">
@@ -100,29 +111,13 @@
             </objects>
             <point key="canvasLocation" x="-257.97101449275362" y="-40.178571428571423"/>
         </scene>
-        <!--View Song Controller-->
-        <scene sceneID="QOy-Hw-uod">
-            <objects>
-                <tableViewController id="SRE-nI-Uy4" customClass="ViewSongController" customModule="topline" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="0AZ-Ym-TP2">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <connections>
-                            <outlet property="dataSource" destination="SRE-nI-Uy4" id="g31-Gv-WQM"/>
-                            <outlet property="delegate" destination="SRE-nI-Uy4" id="PzH-Ld-TpU"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" id="3n8-K0-Igm"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="9Qp-ap-6fO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1368" y="378"/>
-        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemIndigoColor">
+            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
