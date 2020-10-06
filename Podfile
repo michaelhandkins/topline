@@ -8,5 +8,7 @@ target 'topline' do
   # Pods for topline
 
   pod 'RealmSwift'
+  
+  pod 'SwipeCellKit'
 
 end

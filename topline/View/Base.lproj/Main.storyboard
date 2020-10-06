@@ -63,12 +63,13 @@
                     <toolbarItems>
                         <barButtonItem systemItem="add" id="CiV-Kg-5lb">
                             <connections>
-                                <action selector="addLineButtonPressed:" destination="aBn-Gq-wO3" id="96V-jH-s90"/>
+                                <action selector="addButtonPressed:" destination="aBn-Gq-wO3" id="C3x-aj-Ixj"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
+                        <outlet property="addButton" destination="CiV-Kg-5lb" id="HOk-3z-7yv"/>
                         <outlet property="addLineButton" destination="CiV-Kg-5lb" id="Y7U-ld-Sxh"/>
                     </connections>
                 </tableViewController>

@@ -7,12 +7,14 @@
 import UIKit
 import RealmSwift
 import AVFoundation
+import SwipeCellKit
 
 class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
     
     @IBOutlet weak var addLineButton: UIBarButtonItem!
     
+    @IBOutlet weak var addButton: UIBarButtonItem!
     var cellCreatedWithReturn: Int?
     let realm = try! Realm()
     var songWasSet: Bool = false
@@ -29,6 +31,20 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             print("Recordings loaded")
         }
     }
+    
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        let newLyricLine = LyricLine()
+        newLyricLine.text = ""
+        do {
+            try realm.write {
+                song.lyrics.append(newLyricLine)
+            }
+        } catch {
+            print("Error adding new lyric line to song in Realm when add button was pressed")
+        }
+        tableView.reloadData()
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.toolbar.isHidden = false
@@ -92,8 +108,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             }
         }
         
-        
-        
         if indexPath.row > 0 {
             cell.date = song.lyrics[indexPath.row - 1].date
             cell.fileName = "song\(song.id)recording\(cell.date).caf"
@@ -146,6 +160,27 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        if indexPath.row != 0 {
+            return UITableViewCell.EditingStyle.delete
+        } else {
+            return UITableViewCell.EditingStyle.none
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == UITableViewCell.EditingStyle.delete) {
+            do {
+                try realm.write {
+                    realm.delete(song.lyrics[indexPath.row - 1])
+                }
+            } catch {
+                print("Error when trying to delete song's lyrics from Realm with swipe")
+            }
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
     func loadRecordings() {
         recordings = realm.objects(Recording.self)
     }
@@ -176,7 +211,7 @@ extension NoteViewController: UITextViewDelegate {
         if(text == "\n") {
             textView.endEditing(true)
             cellCreatedWithReturn = textView.tag + 1
-            if textView.tag != 0 {
+            if song.lyrics.count == textView.tag || song.lyrics[textView.tag].text != "" {
                 let newLyricLine = LyricLine()
                 newLyricLine.text = ""
                 do {

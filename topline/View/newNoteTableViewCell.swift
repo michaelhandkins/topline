@@ -6,6 +6,7 @@
 import UIKit
 import RealmSwift
 import AVFoundation
+import SwipeCellKit
 
 class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
