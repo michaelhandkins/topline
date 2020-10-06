@@ -14,6 +14,8 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
 
     @IBOutlet weak var lyricsField: UITextView!
     @IBOutlet weak var recordButton: UIButton!
+    @IBOutlet weak var deleteButton: UIButton!
+    
     
     var recorder = AVAudioRecorder()
     var player = AVAudioPlayer()
@@ -23,6 +25,7 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
         recordings = realm.objects(Recording.self)
     }
     var date = Date()
+    var recording: Recording?
     
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
@@ -66,6 +69,19 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
         }
     }
     
+    @IBAction func deleteButtonPressed(_ sender: UIButton) {
+        do {
+            try realm.write {
+                realm.delete(self.recording!)
+            }
+        } catch {
+            print("Error when trying to delete recording from realm with delete button")
+        }
+        deleteButton.isHidden = true
+        recordButton.setImage(UIImage(systemName: "record.circle"), for: .normal)
+        recordButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
     func setupRecorder() {
         let audioFileURL = getDocumentDirectory().appendingPathComponent(fileName)
         
@@ -99,16 +115,16 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
-        print(recorder.url.absoluteString)
+        deleteButton.isHidden = false
         //A new Recording object is created to store the fileName and audioFileURL
-        let newRecording = Recording()
-        newRecording.audioFileName = fileName
-        newRecording.date = self.date
+        recording = Recording()
+        recording!.audioFileName = fileName
+        recording!.date = self.date
         //            newRecording.urlString = recorder.url.absoluteString
         //The Recording is then added to realm
         do {
             try realm.write {
-                realm.add(newRecording)
+                realm.add(recording!)
                 print("New recording added to Realm")
             }
         } catch {
@@ -119,20 +135,20 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     func setupPlayer() {
         
         let audioFileURL = getDocumentDirectory().appendingPathComponent(fileName)
-            do {
-                let session = AVAudioSession.sharedInstance()
-                
-                try session.setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default)
-                try session.setActive(true)
-                
-                player = try AVAudioPlayer(contentsOf: audioFileURL)
-                print("Player set up to use the cell's audio URL")
-                player.delegate = self
-                player.prepareToPlay()
-                player.volume = 1.0
-            } catch {
-                print(error)
-            }
+        do {
+            let session = AVAudioSession.sharedInstance()
+            
+            try session.setCategory(AVAudioSession.Category.playback, mode: AVAudioSession.Mode.default)
+            try session.setActive(true)
+            
+            player = try AVAudioPlayer(contentsOf: audioFileURL)
+            print("Player set up to use the cell's audio URL")
+            player.delegate = self
+            player.prepareToPlay()
+            player.volume = 1.0
+        } catch {
+            print(error)
+        }
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {

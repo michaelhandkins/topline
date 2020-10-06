@@ -97,6 +97,8 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lyricsCell", for: indexPath) as! newNoteTableViewCell
         
+        cell.deleteButton.isHidden = true
+        
         cell.lyricsField.delegate = self
         //Creating the audio file name for the recording of each cell except the first, which is for the title of the song
         
@@ -118,6 +120,9 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             if safeRecordings.contains(where: {$0.audioFileName == cell.fileName}) {
                 print("A corresponding recording is present")
                 cell.recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
+                cell.deleteButton.isHidden = false
+                let safeRecording = safeRecordings.filter({ $0.audioFileName == cell.fileName }).first
+                cell.recording = safeRecording
             }
         }
         
