@@ -49,6 +49,19 @@ class HomeViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == UITableViewCell.EditingStyle.delete) {
+            do {
+                try realm.write {
+                    realm.delete(songs![indexPath.row])
+                }
+            } catch {
+                print("Error when trying to delete song from Realm with swipe")
+            }
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         addButtonPressed = true
