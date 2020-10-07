@@ -132,14 +132,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
 //        }
         return song.lyrics.count + 1
     }
-
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row > 0 {
-            return 58
-        } else {
-            return 80
-        }
-    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lyricsCell", for: indexPath) as! newNoteTableViewCell
@@ -161,6 +153,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         if indexPath.row > 0 {
             cell.date = song.lyrics[indexPath.row - 1].date
             cell.fileName = "song\(song.id)recording\(cell.date).caf"
+            cell.lyricsField.font = UIFont.systemFont(ofSize: 14)
         }
             
         if let safeRecordings = recordings {
@@ -190,7 +183,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         
         //If the song does not have a title, create a placeholder
         if indexPath.row == 0 && song.title == "Untitled" {
-            cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
+            cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 38.0)
             cell.lyricsField.textColor = UIColor.lightGray
             cell.lyricsField.text = "Song Title:"
             cell.recordButton.isHidden = true
