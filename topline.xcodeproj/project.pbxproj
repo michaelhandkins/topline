@@ -154,6 +154,8 @@
 			dependencies = (
 			);
 			name = topline;
+			packageProductDependencies = (
+			);
 			productName = topline;
 			productReference = C2B9D6542520E1A2002123F0 /* topline.app */;
 			productType = "com.apple.product-type.application";
@@ -181,6 +183,8 @@
 				Base,
 			);
 			mainGroup = C2B9D64B2520E1A2002123F0;
+			packageReferences = (
+			);
 			productRefGroup = C2B9D6552520E1A2002123F0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

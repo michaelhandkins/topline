@@ -10,5 +10,5 @@ target 'topline' do
   pod 'RealmSwift'
   
   pod 'SwipeCellKit'
-
+  
 end
