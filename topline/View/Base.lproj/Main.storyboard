@@ -50,6 +50,7 @@
         <!--Note View Controller-->
         <scene sceneID="tAv-c8-ulq">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="F71-Ao-By3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <tableViewController id="aBn-Gq-wO3" userLabel="Note View Controller" customClass="NoteViewController" customModule="topline" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mMC-8V-cW6">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
@@ -68,7 +69,17 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="Title" id="NCa-y0-sMd">
+                    <navigationItem key="navigationItem" id="NCa-y0-sMd">
+                        <nil key="title"/>
+                        <switch key="titleView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="at0-1T-Kad">
+                            <rect key="frame" x="181.5" y="6.5" width="51" height="31"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="onTintColor" systemColor="systemIndigoColor"/>
+                            <color key="thumbTintColor" systemColor="systemGray5Color"/>
+                            <connections>
+                                <action selector="buttonsSwitchFlipped:" destination="aBn-Gq-wO3" eventType="valueChanged" id="e0w-9u-4O8"/>
+                            </connections>
+                        </switch>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="dgo-Ck-Yoo">
                             <color key="tintColor" systemColor="systemIndigoColor"/>
                             <connections>
@@ -81,10 +92,10 @@
                     <connections>
                         <outlet property="addButton" destination="CiV-Kg-5lb" id="HOk-3z-7yv"/>
                         <outlet property="addLineButton" destination="CiV-Kg-5lb" id="Y7U-ld-Sxh"/>
+                        <outlet property="buttonsSwitch" destination="at0-1T-Kad" id="htP-2l-Z4d"/>
                         <outlet property="doneButton" destination="dgo-Ck-Yoo" id="OKM-as-PFq"/>
                     </connections>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="F71-Ao-By3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1423" y="-40"/>
         </scene>
@@ -115,6 +126,9 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemIndigoColor">
             <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

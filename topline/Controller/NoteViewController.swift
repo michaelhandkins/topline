@@ -13,12 +13,11 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     
     
     
+    @IBOutlet weak var buttonsSwitch: UISwitch!
     @IBOutlet weak var doneButton: UIBarButtonItem!
     @IBOutlet weak var addLineButton: UIBarButtonItem!
-    
-    
-    
     @IBOutlet weak var addButton: UIBarButtonItem!
+    var switchFlipped: Bool = false
     var cellCreatedWithReturn: Int?
     let realm = try! Realm()
     var songWasSet: Bool = false
@@ -53,6 +52,12 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         cellCreatedWithReturn = nil
         tableView.reloadData()
     }
+    
+    @IBAction func buttonsSwitchFlipped(_ sender: UISwitch) {
+        switchFlipped = !switchFlipped
+        tableView.reloadData()
+    }
+    
     
     func hideNavigationButton() {
         doneButton.isEnabled = false
@@ -128,6 +133,14 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         return song.lyrics.count + 1
     }
 
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row > 0 {
+            return 58
+        } else {
+            return 80
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lyricsCell", for: indexPath) as! newNoteTableViewCell
         
@@ -194,6 +207,21 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         } else if indexPath.row == 0 && song.title != "Untitled" {
             cell.lyricsField.text = song.title
             cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
+            cell.recordButton.isHidden = true
+        }
+        
+        if switchFlipped == true {
+            cell.recordButton.isHidden = true
+            cell.deleteButton.isHidden = true
+        } else {
+            cell.recordButton.isHidden = false
+            cell.recordButton.isHidden = false
+        }
+        
+        if indexPath.row == 0 && song.title == "Untitled" {
+            cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
+            cell.lyricsField.textColor = UIColor.lightGray
+            cell.lyricsField.text = "Song Title:"
             cell.recordButton.isHidden = true
         }
         

@@ -27,6 +27,12 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     var date = Date()
     var recording: Recording?
     
+    override func prepareForReuse() {
+        recordButton.isHidden = false
+        lyricsField.font = UIFont.systemFont(ofSize: 14)
+        lyricsField.textColor = UIColor(named: "darkModeBlack")
+    }
+    
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         // make sure scroll is disabled
