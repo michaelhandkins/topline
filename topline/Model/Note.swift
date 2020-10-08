@@ -12,6 +12,7 @@ class Note: Object {
     
     @objc dynamic var title: String = "Untitled"
     @objc dynamic var id = Date()
+    @objc dynamic var lastEdited = Date()
     let lyrics = List<LyricLine>()
     let recordings = List<String>()
     

@@ -70,7 +70,7 @@ class HomeViewController: UITableViewController {
     }
     
     func loadSongs() {
-        songs = realm.objects(Note.self)
+        songs = realm.objects(Note.self).sorted(byKeyPath: "lastEdited", ascending: false)
         tableView.reloadData()
     }
     

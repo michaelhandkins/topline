@@ -119,6 +119,13 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        do {
+            try realm.write {
+                self.song.lastEdited = Date()
+            }
+        } catch {
+            print("Error updating when the song was last edited.")
+        }
        
     }
 
@@ -153,7 +160,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         if indexPath.row > 0 {
             cell.date = song.lyrics[indexPath.row - 1].date
             cell.fileName = "song\(song.id)recording\(song.lyrics[indexPath.row - 1].date).caf"
-            cell.lyricsField.font = UIFont.systemFont(ofSize: 14)
+            cell.lyricsField.font = UIFont.systemFont(ofSize: 16)
         }
             
         if let safeRecordings = recordings {

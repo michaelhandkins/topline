@@ -29,7 +29,7 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     
     override func prepareForReuse() {
         recordButton.isHidden = false
-        lyricsField.font = UIFont.systemFont(ofSize: 14)
+        lyricsField.font = UIFont.systemFont(ofSize: 16)
         lyricsField.textColor = UIColor(named: "darkModeBlack")
     }
     
