@@ -152,7 +152,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         
         if indexPath.row > 0 {
             cell.date = song.lyrics[indexPath.row - 1].date
-            cell.fileName = "song\(song.id)recording\(cell.date).caf"
+            cell.fileName = "song\(song.id)recording\(song.lyrics[indexPath.row - 1].date).caf"
             cell.lyricsField.font = UIFont.systemFont(ofSize: 14)
         }
             
@@ -164,6 +164,8 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
                 cell.deleteButton.isHidden = false
                 let safeRecording = safeRecordings.filter({ $0.audioFileName == cell.fileName }).first
                 cell.recording = safeRecording
+            } else {
+                cell.recordButton.setImage(UIImage(systemName: "record.circle"), for: .normal)
             }
         }
         
@@ -181,9 +183,16 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         
         cell.lyricsField.tag = indexPath.row
         
-        //If the song does not have a title, create a placeholder
+        if switchFlipped == true {
+            cell.recordButton.isHidden = true
+            cell.deleteButton.isHidden = true
+        } else {
+            cell.recordButton.isHidden = false
+            cell.recordButton.isHidden = false
+        }
+        
         if indexPath.row == 0 && song.title == "Untitled" {
-            cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 38.0)
+            cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 36.0)
             cell.lyricsField.textColor = UIColor.lightGray
             cell.lyricsField.text = "Song Title:"
             cell.recordButton.isHidden = true
@@ -199,22 +208,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         //Fills in the title of the song if one is present
         } else if indexPath.row == 0 && song.title != "Untitled" {
             cell.lyricsField.text = song.title
-            cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
-            cell.recordButton.isHidden = true
-        }
-        
-        if switchFlipped == true {
-            cell.recordButton.isHidden = true
-            cell.deleteButton.isHidden = true
-        } else {
-            cell.recordButton.isHidden = false
-            cell.recordButton.isHidden = false
-        }
-        
-        if indexPath.row == 0 && song.title == "Untitled" {
-            cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 30.0)
-            cell.lyricsField.textColor = UIColor.lightGray
-            cell.lyricsField.text = "Song Title:"
+            cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 36.0)
             cell.recordButton.isHidden = true
         }
         
@@ -238,6 +232,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             } catch {
                 print("Error when trying to delete song's lyrics from Realm with swipe")
             }
+            
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
         tableView.reloadData()
