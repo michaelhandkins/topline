@@ -28,7 +28,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     }
     var songTitle: String?
     var myData: [String] = []
-    var callback: ((String) -> ())?
     var recordings: Results<Recording>? {
         didSet {
             print("Recordings loaded")
@@ -146,8 +145,45 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         hideNavigationButton()
         cell.deleteButton.isHidden = true
         
-        cell.lyricsField.delegate = self
-        //Creating the audio file name for the recording of each cell except the first, which is for the title of the song
+        cell.callback = { str in
+            
+            if self.myData.count > 0 && indexPath.row > 0 && self.myData.count >= indexPath.row {
+                self.myData[indexPath.row - 1] = str
+            } else if indexPath.row == 0 {
+                self.songTitle = str
+            } else {
+                self.myData.append(str)
+            }
+            tableView.performBatchUpdates(nil)
+        }
+        
+        cell.returnKeyCallback = { [weak self] in
+            if let self = self {
+                if self.song.lyrics.count == cell.lyricsField.tag || self.song.lyrics[cell.lyricsField.tag].text != "" {
+                    let newRow = indexPath.row + 1
+                    let newLyricLine = LyricLine()
+                    do {
+                        try self.realm.write {
+                            self.song.lyrics.insert(newLyricLine, at: newRow)
+                        }
+                    } catch {
+                        print("Error adding new lyric line to song in Realm when return pressed")
+                    }
+                    
+                    let newIndexPath = IndexPath(row: newRow, section: 0)
+                    self.tableView.performBatchUpdates({
+                        self.tableView.insertRows(at: [newIndexPath], with: .automatic)
+                    }, completion: { b in
+                        guard let cell = tableView.cellForRow(at: newIndexPath) as? newNoteTableViewCell else { return }
+                        cell.lyricsField.becomeFirstResponder()
+                    })
+                }
+                self.tableView.reloadData()
+            }
+        }
+        
+        
+//        cell.lyricsField.delegate = self
         
         DispatchQueue.main.async {
             if let newCellIndexPath = self.cellCreatedWithReturn {
@@ -177,16 +213,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         }
         
         //Enables the dynamic cell height which fits the text of the text view
-        self.callback = { str in
-            if self.myData.count > 0 && indexPath.row > 0 && self.myData.count >= indexPath.row {
-                self.myData[indexPath.row - 1] = str
-            } else if indexPath.row == 0 {
-                self.songTitle = str
-            } else {
-                self.myData.append(str)
-            }
-            tableView.performBatchUpdates(nil)
-        }
         
         cell.lyricsField.tag = indexPath.row
         
@@ -252,104 +278,104 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
 }
 
 //MARK: - TextView Delegate Methods
-extension NoteViewController: UITextViewDelegate {
-    
-    func textViewDidChange(_ textView: UITextView) {
-        let str = textView.text ?? ""
-        // tell the controller
-        callback?(str)
-        
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        cellCreatedWithReturn = nil
-        showNavigationButton()
-        
-        print("Text editing began")
-        if textView.textColor == UIColor.lightGray {
-            textView.text = nil
-            textView.textColor = UIColor(named: "darkModeBlack")
-        }
-        
-    }
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if(text == "\n") {
-            textView.endEditing(true)
-            cellCreatedWithReturn = textView.tag + 1
-            if song.lyrics.count == textView.tag || song.lyrics[textView.tag].text != "" {
-                let newLyricLine = LyricLine()
-                newLyricLine.text = ""
-                do {
-                    try realm.write {
-                        self.song.lyrics.insert(newLyricLine, at: textView.tag)
-                        print("Successfully inserted new lyric line in Realm")
-                    }
-                } catch {
-                    print("Error when inserting new lyric line after pressing return")
-                }
-            }
-            tableView.reloadData()
-            return false
-        } else {
-            return true
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        print("Text field ended editing")
-
-        if textView.tag == 0 {
-            if textView.text.isEmpty {
-                textView.text = "Song Title:"
-                textView.textColor = UIColor.lightGray
-                songTitle = "Untitled"
-                do {
-                    try self.realm.write {
-                        self.song.title = songTitle!
-                    }
-                } catch {
-                    print("Error when updating song title to 'Untitled' in Realm: \(error)")
-                }
-            } else {
-                songTitle = textView.text
-                do {
-                    try self.realm.write {
-                        self.song.title = songTitle!
-                    }
-                } catch {
-                    print("Error when updating song title in Realm to user inputted text: \(error)")
-                }
-            }
-        } else {
-            if song.lyrics.count >= textView.tag {
-                let updatedLine = LyricLine()
-                updatedLine.text = textView.text
-                updatedLine.date = song.lyrics[textView.tag - 1].date
-                do {
-                    try self.realm.write {
-                        self.song.lyrics[textView.tag - 1] = updatedLine
-                        print("Song lyrics updated in Realm")
-                    }
-                } catch {
-                    print("Error when updating lyric line to song in Realm: \(error)")
-                }
-            } else {
-                let newLine = LyricLine()
-                newLine.text = textView.text
-                do {
-                    try self.realm.write {
-                        self.song.lyrics.append(newLine)
-                        print("New song lyrics added in Realm")
-                    }
-                } catch {
-                    print("Error when adding new lyric line to song in Realm: \(error)")
-                }
-            }
-        }
-        
-//        tableView.reloadData()
-
-    }
-    
-}
+//extension NoteViewController: UITextViewDelegate {
+//
+//    func textViewDidChange(_ textView: UITextView) {
+//        let str = textView.text ?? ""
+//        // tell the controller
+//        callback?(str)
+//
+//    }
+//
+//    func textViewDidBeginEditing(_ textView: UITextView) {
+//        cellCreatedWithReturn = nil
+//        showNavigationButton()
+//
+//        print("Text editing began")
+//        if textView.textColor == UIColor.lightGray {
+//            textView.text = nil
+//            textView.textColor = UIColor(named: "darkModeBlack")
+//        }
+//
+//    }
+//
+//    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+//        if(text == "\n") {
+//            textView.endEditing(true)
+//            cellCreatedWithReturn = textView.tag + 1
+//            if song.lyrics.count == textView.tag || song.lyrics[textView.tag].text != "" {
+//                let newLyricLine = LyricLine()
+//                newLyricLine.text = ""
+//                do {
+//                    try realm.write {
+//                        self.song.lyrics.insert(newLyricLine, at: textView.tag)
+//                        print("Successfully inserted new lyric line in Realm")
+//                    }
+//                } catch {
+//                    print("Error when inserting new lyric line after pressing return")
+//                }
+//            }
+//            tableView.reloadData()
+//            return false
+//        } else {
+//            return true
+//        }
+//    }
+//
+//    func textViewDidEndEditing(_ textView: UITextView) {
+//        print("Text field ended editing")
+//
+//        if textView.tag == 0 {
+//            if textView.text.isEmpty {
+//                textView.text = "Song Title:"
+//                textView.textColor = UIColor.lightGray
+//                songTitle = "Untitled"
+//                do {
+//                    try self.realm.write {
+//                        self.song.title = songTitle!
+//                    }
+//                } catch {
+//                    print("Error when updating song title to 'Untitled' in Realm: \(error)")
+//                }
+//            } else {
+//                songTitle = textView.text
+//                do {
+//                    try self.realm.write {
+//                        self.song.title = songTitle!
+//                    }
+//                } catch {
+//                    print("Error when updating song title in Realm to user inputted text: \(error)")
+//                }
+//            }
+//        } else {
+//            if song.lyrics.count >= textView.tag {
+//                let updatedLine = LyricLine()
+//                updatedLine.text = textView.text
+//                updatedLine.date = song.lyrics[textView.tag - 1].date
+//                do {
+//                    try self.realm.write {
+//                        self.song.lyrics[textView.tag - 1] = updatedLine
+//                        print("Song lyrics updated in Realm")
+//                    }
+//                } catch {
+//                    print("Error when updating lyric line to song in Realm: \(error)")
+//                }
+//            } else {
+//                let newLine = LyricLine()
+//                newLine.text = textView.text
+//                do {
+//                    try self.realm.write {
+//                        self.song.lyrics.append(newLine)
+//                        print("New song lyrics added in Realm")
+//                    }
+//                } catch {
+//                    print("Error when adding new lyric line to song in Realm: \(error)")
+//                }
+//            }
+//        }
+//
+////        tableView.reloadData()
+//
+//    }
+//
+//}

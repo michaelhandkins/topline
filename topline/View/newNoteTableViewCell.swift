@@ -8,7 +8,7 @@ import RealmSwift
 import AVFoundation
 import SwipeCellKit
 
-class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
+class newNoteTableViewCell: UITableViewCell, AVAudioPlayerDelegate, AVAudioRecorderDelegate {
     
     let realm = try! Realm()
 
@@ -16,7 +16,10 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
     
-    
+    var cellCreatedWithReturn: Int?
+    var song: Note?
+    var callback: ((String) -> ())?
+    var returnKeyCallback: (()->())?
     var recorder = AVAudioRecorder()
     var player = AVAudioPlayer()
     var fileName: String = "recording.m4a"
@@ -159,6 +162,94 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
+    }
+    
+}
+
+extension newNoteTableViewCell: UITextViewDelegate {
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let str = textView.text ?? ""
+        // tell the controller
+        callback?(str)
+        
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        cellCreatedWithReturn = nil
+        
+        print("Text editing began")
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor(named: "darkModeBlack")
+        }
+        
+    }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if(text == "\n") {
+            returnKeyCallback?()
+//            textView.endEditing(true)
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        print("Text field ended editing")
+
+        if textView.tag == 0 {
+            if textView.text.isEmpty {
+                textView.text = "Song Title:"
+                textView.textColor = UIColor.lightGray
+                let songTitle = "Untitled"
+                do {
+                    try self.realm.write {
+                        self.song?.title = songTitle
+                    }
+                } catch {
+                    print("Error when updating song title to 'Untitled' in Realm: \(error)")
+                }
+            } else {
+                let songTitle = textView.text!
+                do {
+                    try self.realm.write {
+                        self.song?.title = songTitle
+                    }
+                } catch {
+                    print("Error when updating song title in Realm to user inputted text: \(error)")
+                }
+            }
+        } else {
+            if song!.lyrics.count >= textView.tag {
+                let updatedLine = LyricLine()
+                updatedLine.text = textView.text
+                updatedLine.date = song!.lyrics[textView.tag - 1].date
+                do {
+                    try self.realm.write {
+                        self.song!.lyrics[textView.tag - 1] = updatedLine
+                        print("Song lyrics updated in Realm")
+                    }
+                } catch {
+                    print("Error when updating lyric line to song in Realm: \(error)")
+                }
+            } else {
+                let newLine = LyricLine()
+                newLine.text = textView.text
+                do {
+                    try self.realm.write {
+                        self.song!.lyrics.append(newLine)
+                        print("New song lyrics added in Realm")
+                    }
+                } catch {
+                    print("Error when adding new lyric line to song in Realm: \(error)")
+                }
+            }
+        }
+        
+//        tableView.reloadData()
+
     }
     
 }
