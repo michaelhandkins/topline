@@ -32,6 +32,8 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             print("Recordings loaded")
         }
     }
+    var returnKeyCallback: (()->())?
+    var changedCallback: ((String)->())?
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         let newLyricLine = LyricLine()
@@ -149,14 +151,14 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         cell.lyricsField.delegate = self
         //Creating the audio file name for the recording of each cell except the first, which is for the title of the song
         
-        DispatchQueue.main.async {
-            if let newCellIndexPath = self.cellCreatedWithReturn {
-                if indexPath.row == newCellIndexPath {
-                    cell.lyricsField.becomeFirstResponder()
-                    self.showNavigationButton()
-                }
-            }
-        }
+//        DispatchQueue.main.async {
+//            if let newCellIndexPath = self.cellCreatedWithReturn {
+//                if indexPath.row == newCellIndexPath {
+//                    cell.lyricsField.becomeFirstResponder()
+//                    self.showNavigationButton()
+//                }
+//            }
+//        }
         
         
         if indexPath.row > 0 {
@@ -190,6 +192,26 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             tableView.performBatchUpdates(nil)
         }
         
+        self.returnKeyCallback = { [weak self] in
+            if let self = self {
+                let newRow = self.cellCreatedWithReturn! - 1
+                do {
+                    try self.realm.write {
+                        self.song.lyrics.insert(LyricLine(), at: newRow)
+                    }
+                } catch {
+                    print("Error when inserting new lyric line to song in Realm when return pressed")
+                }
+                let newIndexPath = IndexPath(row: self.cellCreatedWithReturn!, section: 0)
+                self.tableView.performBatchUpdates({
+                    self.tableView.insertRows(at: [newIndexPath], with: .automatic)
+                }, completion: { b in
+                    guard let c = tableView.cellForRow(at: newIndexPath) as? newNoteTableViewCell else { return }
+                    c.lyricsField.becomeFirstResponder()
+                })
+            }
+        }
+        
         cell.lyricsField.tag = indexPath.row
         
         if switchFlipped == true {
@@ -220,6 +242,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 36.0)
             cell.recordButton.isHidden = true
         }
+        
         
         return cell
     }
@@ -279,21 +302,22 @@ extension NoteViewController: UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if(text == "\n") {
-            textView.endEditing(true)
             cellCreatedWithReturn = textView.tag + 1
-            if song.lyrics.count == textView.tag || song.lyrics[textView.tag].text != "" {
-                let newLyricLine = LyricLine()
-                newLyricLine.text = ""
-                do {
-                    try realm.write {
-                        self.song.lyrics.insert(newLyricLine, at: textView.tag)
-                        print("Successfully inserted new lyric line in Realm")
-                    }
-                } catch {
-                    print("Error when inserting new lyric line after pressing return")
-                }
-            }
-            tableView.reloadData()
+            returnKeyCallback?()
+//            textView.endEditing(true)
+//            if song.lyrics.count == textView.tag || song.lyrics[textView.tag].text != "" {
+//                let newLyricLine = LyricLine()
+//                newLyricLine.text = ""
+//                do {
+//                    try realm.write {
+//                        self.song.lyrics.insert(newLyricLine, at: textView.tag)
+//                        print("Successfully inserted new lyric line in Realm")
+//                    }
+//                } catch {
+//                    print("Error when inserting new lyric line after pressing return")
+//                }
+//            }
+//            tableView.reloadData()
             return false
         } else {
             return true
