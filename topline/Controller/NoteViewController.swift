@@ -325,6 +325,7 @@ extension NoteViewController: UITextViewDelegate {
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
+        hideNavigationButton()
         print("Text field ended editing")
 
         if textView.tag == 0 {
