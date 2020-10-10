@@ -31,7 +31,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Songs" id="acv-Sh-zGY">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="z4p-UW-MXl">
+                        <barButtonItem key="rightBarButtonItem" image="waveform.path.badge.plus" catalog="system" id="z4p-UW-MXl">
                             <color key="tintColor" systemColor="systemIndigoColor"/>
                             <connections>
                                 <action selector="addButtonPressed:" destination="Yal-NP-NZ3" id="g6x-NL-SsQ"/>
@@ -50,7 +50,6 @@
         <!--Note View Controller-->
         <scene sceneID="tAv-c8-ulq">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="F71-Ao-By3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <tableViewController id="aBn-Gq-wO3" userLabel="Note View Controller" customClass="NoteViewController" customModule="topline" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mMC-8V-cW6">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
@@ -96,6 +95,7 @@
                         <outlet property="doneButton" destination="dgo-Ck-Yoo" id="OKM-as-PFq"/>
                     </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="F71-Ao-By3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1423" y="-40"/>
         </scene>
@@ -124,6 +124,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="waveform.path.badge.plus" catalog="system" width="128" height="114"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

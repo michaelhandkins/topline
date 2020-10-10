@@ -11,8 +11,6 @@ import SwipeCellKit
 
 class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
-    
-    
     @IBOutlet weak var buttonsSwitch: UISwitch!
     @IBOutlet weak var doneButton: UIBarButtonItem!
     @IBOutlet weak var addLineButton: UIBarButtonItem!
@@ -50,6 +48,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
         cellCreatedWithReturn = nil
+        hideNavigationButton()
         tableView.reloadData()
     }
     
@@ -77,6 +76,8 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        hideNavigationButton()
         
         navigationController?.navigationBar.tintColor = UIColor.systemIndigo
         
@@ -118,7 +119,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         tableView.contentInset = .zero
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         do {
             try realm.write {
                 self.song.lastEdited = Date()
@@ -143,7 +144,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "lyricsCell", for: indexPath) as! newNoteTableViewCell
         
-        hideNavigationButton()
         cell.deleteButton.isHidden = true
         
         cell.lyricsField.delegate = self
@@ -153,9 +153,11 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             if let newCellIndexPath = self.cellCreatedWithReturn {
                 if indexPath.row == newCellIndexPath {
                     cell.lyricsField.becomeFirstResponder()
+                    self.showNavigationButton()
                 }
             }
         }
+        
         
         if indexPath.row > 0 {
             cell.date = song.lyrics[indexPath.row - 1].date
@@ -262,8 +264,10 @@ extension NoteViewController: UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        cellCreatedWithReturn = nil
         showNavigationButton()
+        cellCreatedWithReturn = nil
+        let indexPath = IndexPath(row: textView.tag, section: 0)
+        tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
         
         print("Text editing began")
         if textView.textColor == UIColor.lightGray {
