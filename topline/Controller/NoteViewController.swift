@@ -17,6 +17,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     @IBOutlet weak var addButton: UIBarButtonItem!
     var switchFlipped: Bool = false
     var cellCreatedWithReturn: Int?
+    var cellLastEdited: Int?
     let realm = try! Realm()
     var songWasSet: Bool = false
     var song: Note = Note() {
@@ -26,13 +27,9 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     }
     var songTitle: String?
     var myData: [String] = []
-    var callback: ((String) -> ())?
-    var recordings: Results<Recording>? {
-        didSet {
-            print("Recordings loaded")
-        }
-    }
+    var recordings: Results<Recording>?
     var returnKeyCallback: (()->())?
+    var callback: ((String) -> ())?
     var changedCallback: ((String)->())?
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -52,6 +49,8 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         cellCreatedWithReturn = nil
         hideNavigationButton()
         tableView.reloadData()
+        let indexPath = IndexPath(row: cellLastEdited!, section: 0)
+        tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
     }
     
     @IBAction func buttonsSwitchFlipped(_ sender: UISwitch) {
@@ -64,7 +63,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         doneButton.isEnabled = false
         doneButton.tintColor = UIColor.clear
     }
-    
     func showNavigationButton() {
         doneButton.isEnabled = true
         doneButton.tintColor = UIColor.systemIndigo
@@ -74,7 +72,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.toolbar.isHidden = false
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,10 +110,10 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     
     @objc private func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
-            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height - 30, right: 0)
+            tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
         }
     }
-
+    
     @objc private func keyboardWillHide(notification: NSNotification) {
         tableView.contentInset = .zero
     }
@@ -134,12 +131,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
 
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-//        if let safeLyrics = lyrics {
-//            return safeLyrics.count + 2
-//        } else {
-//            return 2
-//        }
         return song.lyrics.count + 1
     }
     
@@ -148,18 +139,31 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         
         cell.deleteButton.isHidden = true
         
+        cell.lyricsField.tag = indexPath.row
+        
         cell.lyricsField.delegate = self
-        //Creating the audio file name for the recording of each cell except the first, which is for the title of the song
         
-//        DispatchQueue.main.async {
-//            if let newCellIndexPath = self.cellCreatedWithReturn {
-//                if indexPath.row == newCellIndexPath {
-//                    cell.lyricsField.becomeFirstResponder()
-//                    self.showNavigationButton()
-//                }
-//            }
-//        }
-        
+        self.returnKeyCallback = { [weak self] in
+            if let self = self {
+                let newRow = self.cellCreatedWithReturn! - 1
+                do {
+                    try self.realm.write {
+                        self.song.lyrics.insert(LyricLine(), at: newRow)
+                    }
+                } catch {
+                    print("Error when inserting new lyric line to song in Realm when return pressed")
+                }
+                let newIndexPath = IndexPath(row: self.cellCreatedWithReturn!, section: 0)
+                print(newIndexPath.row)
+                self.tableView.performBatchUpdates({
+                    self.tableView.insertRows(at: [newIndexPath], with: .automatic)
+                }, completion: { b in
+                    guard let c = tableView.cellForRow(at: newIndexPath) as? newNoteTableViewCell else { return }
+                    c.lyricsField.becomeFirstResponder()
+                    c.lyricsField.tag = self.cellCreatedWithReturn!
+                })
+            }
+        }
         
         if indexPath.row > 0 {
             cell.date = song.lyrics[indexPath.row - 1].date
@@ -192,28 +196,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             tableView.performBatchUpdates(nil)
         }
         
-        self.returnKeyCallback = { [weak self] in
-            if let self = self {
-                let newRow = self.cellCreatedWithReturn! - 1
-                do {
-                    try self.realm.write {
-                        self.song.lyrics.insert(LyricLine(), at: newRow)
-                    }
-                } catch {
-                    print("Error when inserting new lyric line to song in Realm when return pressed")
-                }
-                let newIndexPath = IndexPath(row: self.cellCreatedWithReturn!, section: 0)
-                self.tableView.performBatchUpdates({
-                    self.tableView.insertRows(at: [newIndexPath], with: .automatic)
-                }, completion: { b in
-                    guard let c = tableView.cellForRow(at: newIndexPath) as? newNoteTableViewCell else { return }
-                    c.lyricsField.becomeFirstResponder()
-                })
-            }
-        }
-        
-        cell.lyricsField.tag = indexPath.row
-        
         if switchFlipped == true {
             cell.recordButton.isHidden = true
             cell.deleteButton.isHidden = true
@@ -240,9 +222,9 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         } else if indexPath.row == 0 && song.title != "Untitled" {
             cell.lyricsField.text = song.title
             cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 36.0)
+            cell.lyricsField.textColor = UIColor(named: "darkModeIndigo")
             cell.recordButton.isHidden = true
         }
-        
         
         return cell
     }
@@ -283,41 +265,25 @@ extension NoteViewController: UITextViewDelegate {
         let str = textView.text ?? ""
         // tell the controller
         callback?(str)
-        
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         showNavigationButton()
-        cellCreatedWithReturn = nil
+        cellLastEdited = textView.tag
         let indexPath = IndexPath(row: textView.tag, section: 0)
         tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
         
-        print("Text editing began")
         if textView.textColor == UIColor.lightGray {
             textView.text = nil
-            textView.textColor = UIColor(named: "darkModeBlack")
+            textView.textColor = UIColor(named: "darkModeIndigo")
         }
-        
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if(text == "\n") {
             cellCreatedWithReturn = textView.tag + 1
+            print(cellCreatedWithReturn!)
             returnKeyCallback?()
-//            textView.endEditing(true)
-//            if song.lyrics.count == textView.tag || song.lyrics[textView.tag].text != "" {
-//                let newLyricLine = LyricLine()
-//                newLyricLine.text = ""
-//                do {
-//                    try realm.write {
-//                        self.song.lyrics.insert(newLyricLine, at: textView.tag)
-//                        print("Successfully inserted new lyric line in Realm")
-//                    }
-//                } catch {
-//                    print("Error when inserting new lyric line after pressing return")
-//                }
-//            }
-//            tableView.reloadData()
             return false
         } else {
             return true
@@ -376,9 +342,5 @@ extension NoteViewController: UITextViewDelegate {
                 }
             }
         }
-        
-//        tableView.reloadData()
-
     }
-    
 }
