@@ -145,10 +145,11 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         
         self.returnKeyCallback = { [weak self] in
             if let self = self {
-                let newRow = self.cellCreatedWithReturn! - 1
+                let newLyricLineIndex = self.cellCreatedWithReturn! - 1
+                // this is -1 because cell 0 is not included in the same data source
                 do {
                     try self.realm.write {
-                        self.song.lyrics.insert(LyricLine(), at: newRow)
+                        self.song.lyrics.insert(LyricLine(), at: newLyricLineIndex)
                     }
                 } catch {
                     print("Error when inserting new lyric line to song in Realm when return pressed")
@@ -157,11 +158,15 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
                 print(newIndexPath.row)
                 self.tableView.performBatchUpdates({
                     self.tableView.insertRows(at: [newIndexPath], with: .automatic)
-                }, completion: { b in
+               }, completion: { b in
                     guard let c = tableView.cellForRow(at: newIndexPath) as? newNoteTableViewCell else { return }
                     c.lyricsField.becomeFirstResponder()
                     c.lyricsField.tag = self.cellCreatedWithReturn!
+                    if indexPath.row > newIndexPath.row {
+                        cell.lyricsField.tag += 1
+                    }
                 })
+                self.cellCreatedWithReturn! += 1
             }
         }
         
@@ -229,6 +234,17 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Selected row at row \(indexPath.row)")
+        let cell = tableView.cellForRow(at: indexPath)! as! newNoteTableViewCell
+
+        cell.lyricsField.isUserInteractionEnabled = true
+        cell.lyricsField.becomeFirstResponder()
+        cellCreatedWithReturn = indexPath.row + 1
+        print(cellCreatedWithReturn!)
+        return
+    }
+    
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if indexPath.row != 0 {
             return UITableViewCell.EditingStyle.delete
@@ -265,6 +281,8 @@ extension NoteViewController: UITextViewDelegate {
         let str = textView.text ?? ""
         // tell the controller
         callback?(str)
+        let indexPath = IndexPath(row: cellCreatedWithReturn!, section: 0)
+        tableView.selectRow(at: indexPath, animated: false, scrollPosition: .middle)
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -281,8 +299,8 @@ extension NoteViewController: UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if(text == "\n") {
-            cellCreatedWithReturn = textView.tag + 1
-            print(cellCreatedWithReturn!)
+//            cellCreatedWithReturn = textView.tag + 1
+//            print(cellCreatedWithReturn!)
             returnKeyCallback?()
             return false
         } else {
@@ -292,6 +310,7 @@ extension NoteViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         hideNavigationButton()
+        textView.isUserInteractionEnabled = false
         print("Text field ended editing")
 
         if textView.tag == 0 {

@@ -20,10 +20,13 @@
                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="p7T-8c-oRG">
                         <rect key="frame" x="10" y="5" width="291" height="50"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="OXT-Hw-ff3">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="OXT-Hw-ff3">
                                 <rect key="frame" x="0.0" y="0.0" width="234" height="50"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="tintColor" systemColor="systemIndigoColor"/>
+                                <accessibility key="accessibilityConfiguration">
+                                    <accessibilityTraits key="traits" notEnabled="YES"/>
+                                </accessibility>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -65,9 +68,6 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
-            <accessibility key="accessibilityConfiguration">
-                <accessibilityTraits key="traits" notEnabled="YES"/>
-            </accessibility>
             <connections>
                 <outlet property="deleteButton" destination="9l8-UN-1hZ" id="m10-ya-xKG"/>
                 <outlet property="lyricsField" destination="OXT-Hw-ff3" id="7QV-d5-BUo"/>
