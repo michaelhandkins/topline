@@ -241,7 +241,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         cell.lyricsField.isUserInteractionEnabled = true
         cell.lyricsField.becomeFirstResponder()
         cellCreatedWithReturn = indexPath.row + 1
-        print(cellCreatedWithReturn!)
         return
     }
     
@@ -301,7 +300,13 @@ extension NoteViewController: UITextViewDelegate {
         if(text == "\n") {
 //            cellCreatedWithReturn = textView.tag + 1
 //            print(cellCreatedWithReturn!)
-            returnKeyCallback?()
+            if cellCreatedWithReturn! <= song.lyrics.count && song.lyrics[cellCreatedWithReturn! - 1].text == "" {
+                let indexPath = IndexPath(row: cellCreatedWithReturn!, section: 0)
+                //the following line is not working
+                tableView.selectRow(at: indexPath, animated: true, scrollPosition: .middle)
+            } else {
+                returnKeyCallback?()
+            }
             return false
         } else {
             return true
