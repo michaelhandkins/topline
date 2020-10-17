@@ -46,7 +46,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     }
     
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
-        cellCreatedWithReturn = nil
         hideNavigationButton()
         tableView.reloadData()
         let indexPath = IndexPath(row: cellLastEdited!, section: 0)
@@ -145,6 +144,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         
         self.returnKeyCallback = { [weak self] in
             if let self = self {
+                
                 let newLyricLineIndex = self.cellCreatedWithReturn! - 1
                 // this is -1 because cell 0 is not included in the same data source
                 do {
@@ -158,13 +158,14 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
                 print(newIndexPath.row)
                 self.tableView.performBatchUpdates({
                     self.tableView.insertRows(at: [newIndexPath], with: .automatic)
-               }, completion: { b in
+                }, completion: { b in
                     guard let c = tableView.cellForRow(at: newIndexPath) as? newNoteTableViewCell else { return }
-                    c.lyricsField.becomeFirstResponder()
-                    c.lyricsField.tag = self.cellCreatedWithReturn!
-                    if indexPath.row > newIndexPath.row {
-                        cell.lyricsField.tag += 1
-                    }
+                    self.tableView.delegate?.tableView!(self.tableView, didSelectRowAt: newIndexPath)
+//                    c.lyricsField.becomeFirstResponder()
+//                    c.lyricsField.tag = self.cellCreatedWithReturn!
+//                    if indexPath.row > newIndexPath.row {
+//                        cell.lyricsField.tag += 1
+//                    }
                 })
                 self.cellCreatedWithReturn! += 1
             }
@@ -236,8 +237,8 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Selected row at row \(indexPath.row)")
+        tableView.reloadData()
         let cell = tableView.cellForRow(at: indexPath)! as! newNoteTableViewCell
-
         cell.lyricsField.isUserInteractionEnabled = true
         cell.lyricsField.becomeFirstResponder()
         cellCreatedWithReturn = indexPath.row + 1
@@ -280,16 +281,15 @@ extension NoteViewController: UITextViewDelegate {
         let str = textView.text ?? ""
         // tell the controller
         callback?(str)
-        let indexPath = IndexPath(row: cellCreatedWithReturn!, section: 0)
-        tableView.selectRow(at: indexPath, animated: false, scrollPosition: .middle)
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         showNavigationButton()
         cellLastEdited = textView.tag
-        let indexPath = IndexPath(row: textView.tag, section: 0)
-        tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
-        
+        if textView.tag > 0 {
+            let indexPath = IndexPath(row: textView.tag - 1, section: 0)
+            tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+        }
         if textView.textColor == UIColor.lightGray {
             textView.text = nil
             textView.textColor = UIColor(named: "darkModeIndigo")
@@ -302,8 +302,10 @@ extension NoteViewController: UITextViewDelegate {
 //            print(cellCreatedWithReturn!)
             if cellCreatedWithReturn! <= song.lyrics.count && song.lyrics[cellCreatedWithReturn! - 1].text == "" {
                 let indexPath = IndexPath(row: cellCreatedWithReturn!, section: 0)
+                print(indexPath)
                 //the following line is not working
-                tableView.selectRow(at: indexPath, animated: true, scrollPosition: .middle)
+                self.tableView.delegate?.tableView!(self.tableView, didSelectRowAt: indexPath)
+                print("Tried to select row")
             } else {
                 returnKeyCallback?()
             }
@@ -341,7 +343,7 @@ extension NoteViewController: UITextViewDelegate {
                 }
             }
         } else {
-            if song.lyrics.count >= textView.tag {
+            if song.lyrics.count >=  self.cellCreatedWithReturn! - 1 {
                 let updatedLine = LyricLine()
                 updatedLine.text = textView.text
                 updatedLine.date = song.lyrics[textView.tag - 1].date
