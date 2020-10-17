@@ -17,7 +17,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     @IBOutlet weak var addButton: UIBarButtonItem!
     var switchFlipped: Bool = false
     var cellCreatedWithReturn: Int?
-    var cellLastEdited: Int?
     let realm = try! Realm()
     var songWasSet: Bool = false
     var song: Note = Note() {
@@ -48,7 +47,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
         hideNavigationButton()
         tableView.reloadData()
-        let indexPath = IndexPath(row: cellLastEdited!, section: 0)
+        let indexPath = IndexPath(row: cellCreatedWithReturn! - 1, section: 0)
         tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
     }
     
@@ -159,13 +158,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
                 self.tableView.performBatchUpdates({
                     self.tableView.insertRows(at: [newIndexPath], with: .automatic)
                 }, completion: { b in
-                    guard let c = tableView.cellForRow(at: newIndexPath) as? newNoteTableViewCell else { return }
                     self.tableView.delegate?.tableView!(self.tableView, didSelectRowAt: newIndexPath)
-//                    c.lyricsField.becomeFirstResponder()
-//                    c.lyricsField.tag = self.cellCreatedWithReturn!
-//                    if indexPath.row > newIndexPath.row {
-//                        cell.lyricsField.tag += 1
-//                    }
                 })
                 self.cellCreatedWithReturn! += 1
             }
@@ -237,11 +230,10 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Selected row at row \(indexPath.row)")
-//        tableView.reloadData()
         let cell = tableView.cellForRow(at: indexPath)! as! newNoteTableViewCell
+        cellCreatedWithReturn = indexPath.row + 1
         cell.lyricsField.isUserInteractionEnabled = true
         cell.lyricsField.becomeFirstResponder()
-        cellCreatedWithReturn = indexPath.row + 1
         return
     }
     
@@ -285,8 +277,7 @@ extension NoteViewController: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         showNavigationButton()
-        cellLastEdited = textView.tag
-        if textView.tag > 0 {
+        if cellCreatedWithReturn! - 1 > 0 {
             let indexPath = IndexPath(row: textView.tag - 1, section: 0)
             tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
         }
