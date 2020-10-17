@@ -237,7 +237,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Selected row at row \(indexPath.row)")
-        tableView.reloadData()
+//        tableView.reloadData()
         let cell = tableView.cellForRow(at: indexPath)! as! newNoteTableViewCell
         cell.lyricsField.isUserInteractionEnabled = true
         cell.lyricsField.becomeFirstResponder()
