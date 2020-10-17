@@ -160,7 +160,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
                 }, completion: { b in
                     self.tableView.delegate?.tableView!(self.tableView, didSelectRowAt: newIndexPath)
                 })
-                self.cellCreatedWithReturn! += 1
             }
         }
         
