@@ -171,7 +171,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             
         if let safeRecordings = recordings {
             
-            if safeRecordings.contains(where: {$0.audioFileName == cell.fileName}) {
+            if safeRecordings.contains(where: {$0.audioFileName == cell.fileName}) && indexPath.row > 0 {
                 print("A corresponding recording is present")
                 cell.recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
                 cell.deleteButton.isHidden = false
