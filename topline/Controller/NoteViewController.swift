@@ -15,6 +15,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     @IBOutlet weak var doneButton: UIBarButtonItem!
     @IBOutlet weak var addLineButton: UIBarButtonItem!
     @IBOutlet weak var addButton: UIBarButtonItem!
+    var donePressed: Bool = false
     var switchFlipped: Bool = false
     var cellCreatedWithReturn: Int?
     let realm = try! Realm()
@@ -45,6 +46,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     }
     
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
+        donePressed = true
         hideNavigationButton()
         tableView.reloadData()
         let indexPath = IndexPath(row: cellCreatedWithReturn! - 1, section: 0)
@@ -229,6 +231,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Selected row at row \(indexPath.row)")
+        donePressed = false
         let cell = tableView.cellForRow(at: indexPath)! as! newNoteTableViewCell
         cellCreatedWithReturn = indexPath.row + 1
         cell.lyricsField.isUserInteractionEnabled = true
@@ -237,7 +240,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     }
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        if indexPath.row != 0 {
+        if indexPath.row != 0 && donePressed == true {
             return UITableViewCell.EditingStyle.delete
         } else {
             return UITableViewCell.EditingStyle.none
