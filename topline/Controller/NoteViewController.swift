@@ -15,7 +15,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     @IBOutlet weak var doneButton: UIBarButtonItem!
     @IBOutlet weak var addLineButton: UIBarButtonItem!
     @IBOutlet weak var addButton: UIBarButtonItem!
-    var donePressed: Bool = false
+    var donePressed: Bool = true
     var switchFlipped: Bool = false
     var cellCreatedWithReturn: Int?
     let realm = try! Realm()
