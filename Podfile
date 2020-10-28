@@ -11,6 +11,6 @@ target 'topline' do
   
   pod 'SwipeCellKit'
   
-  pod 'FacebookCore'
+  pod 'FacebookSDK'
   
 end

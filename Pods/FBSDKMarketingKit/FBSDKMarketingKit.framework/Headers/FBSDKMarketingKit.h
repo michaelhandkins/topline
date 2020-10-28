@@ -1,4 +1,4 @@
-// Copyright (c) 2016-present, Facebook, Inc. All rights reserved.
+// Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
 //
 // You are hereby granted a non-exclusive, worldwide, royalty-free license to use,
 // copy, modify, and distribute this software in source code or binary form for use
@@ -16,13 +16,12 @@
 // IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-internal extension Dictionary {
-  func mapKeyValues<K, V>(_ transform: (Element) throws -> (K, V)) rethrows -> [K: V] {
-    var dictionary: [K: V] = [:]
-    try forEach {
-      let transformed = try transform($0)
-      dictionary[transformed.0] = transformed.1
-    }
-    return dictionary
-  }
-}
+#import <UIKit/UIKit.h>
+
+//! Project version number for FBSDKMarketingKit.
+FOUNDATION_EXPORT double FBSDKMarketingKitVersionNumber;
+
+//! Project version string for FBSDKMarketingKit.
+FOUNDATION_EXPORT const unsigned char FBSDKMarketingKitVersionString[];
+
+#import <FBSDKMarketingKit/FBSDKAutoLog.h>
