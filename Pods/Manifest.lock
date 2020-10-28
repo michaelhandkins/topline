@@ -1,4 +1,12 @@
 PODS:
+  - FacebookCore (0.9.0):
+    - FBSDKCoreKit (~> 5.0)
+  - FBSDKCoreKit (5.15.1):
+    - FBSDKCoreKit/Basics (= 5.15.1)
+    - FBSDKCoreKit/Core (= 5.15.1)
+  - FBSDKCoreKit/Basics (5.15.1)
+  - FBSDKCoreKit/Core (5.15.1):
+    - FBSDKCoreKit/Basics
   - Realm (5.3.3):
     - Realm/Headers (= 5.3.3)
   - Realm/Headers (5.3.3)
@@ -7,20 +15,25 @@ PODS:
   - SwipeCellKit (2.7.1)
 
 DEPENDENCIES:
+  - FacebookCore
   - RealmSwift
   - SwipeCellKit
 
 SPEC REPOS:
   trunk:
+    - FacebookCore
+    - FBSDKCoreKit
     - Realm
     - RealmSwift
     - SwipeCellKit
 
 SPEC CHECKSUMS:
+  FacebookCore: ba86524b66cfa86d0f8e65d08faa8504a9f732dd
+  FBSDKCoreKit: 1d5acf7c9d7a2f92bb1a242dc60cae5b7adb91df
   Realm: 2d57ea355bf8ca2a0964d6bfb38d28d7ff2addf6
   RealmSwift: 0a709536ecea30eea1d3c514f6ade2ed078dee3c
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
-PODFILE CHECKSUM: 118224906551969f6489adb54db55dd476e7e517
+PODFILE CHECKSUM: 5ab1f3b23c8c67fd1dbc9ff18554ee7ea4f2138c
 
 COCOAPODS: 1.9.3
