@@ -11,4 +11,6 @@ target 'topline' do
   
   pod 'SwipeCellKit'
   
+  pod 'FBSDKCoreKit'
+  
 end
