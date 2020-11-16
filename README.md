@@ -1,5 +1,7 @@
-# thelyricsapp
+# The Lyrics App
 An app that allows song-writers to record the melody and flow of their lyrics right next to the lyrics they've written.
+
+## User Experience
 
 Upon launching the app, the user will find themselves at the 'Songs' home page, which displays their library of lyrics, organized by song most recently edited.
 
