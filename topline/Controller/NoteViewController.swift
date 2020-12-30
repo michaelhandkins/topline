@@ -11,6 +11,8 @@ import SwipeCellKit
 
 class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
+    var editPressed: Bool = false
+    @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var buttonsSwitch: UISwitch!
     @IBOutlet weak var doneButton: UIBarButtonItem!
     @IBOutlet weak var addLineButton: UIBarButtonItem!
@@ -128,8 +130,46 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         }
        
     }
+    
+    @IBAction func editButtonPressed(_ sender: Any) {
+        if editPressed == false {
+            editPressed = true
+        } else {
+            editPressed = false
+        }
+        if editButton.tintColor == UIColor.systemIndigo {
+            editButton.tintColor = UIColor.systemGray2
+        } else {
+            editButton.tintColor = UIColor.systemIndigo
+        }
+        if tableView.isEditing == true {
+            tableView.isEditing = false
+        } else {
+            tableView.isEditing = true
+        }
+    }
+    
 
     // MARK: - Table view data source
+    
+    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.row != 0 {
+            return true
+        }
+        return false
+    }
+    
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        do {
+            try self.realm.write {
+                self.song.lyrics.swapAt(sourceIndexPath.row-1, destinationIndexPath.row-1)
+                print("Song lyrics updated in Realm")
+            }
+        } catch {
+            print("Error when updating lyric line to song in Realm: \(error)")
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return song.lyrics.count + 1
     }
@@ -239,7 +279,15 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         return
     }
     
+    override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+    
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        
+        if editPressed == true {
+            return .none
+        }
         if indexPath.row != 0 && donePressed == true {
             return UITableViewCell.EditingStyle.delete
         } else {

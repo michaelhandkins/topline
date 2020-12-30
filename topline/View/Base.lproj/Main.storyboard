@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9sf-YW-6ht">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9sf-YW-6ht">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -52,7 +53,7 @@
             <objects>
                 <tableViewController id="aBn-Gq-wO3" userLabel="Note View Controller" customClass="NoteViewController" customModule="topline" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mMC-8V-cW6">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <connections>
@@ -79,12 +80,20 @@
                                 <action selector="buttonsSwitchFlipped:" destination="aBn-Gq-wO3" eventType="valueChanged" id="e0w-9u-4O8"/>
                             </connections>
                         </switch>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="dgo-Ck-Yoo">
-                            <color key="tintColor" systemColor="systemIndigoColor"/>
-                            <connections>
-                                <action selector="doneButtonPressed:" destination="aBn-Gq-wO3" id="9l2-Pv-9ZM"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="done" id="dgo-Ck-Yoo">
+                                <color key="tintColor" systemColor="systemIndigoColor"/>
+                                <connections>
+                                    <action selector="doneButtonPressed:" destination="aBn-Gq-wO3" id="9l2-Pv-9ZM"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Item" image="list.number" catalog="system" id="rfH-5I-bCL">
+                                <color key="tintColor" systemColor="systemGray2Color"/>
+                                <connections>
+                                    <action selector="editButtonPressed:" destination="aBn-Gq-wO3" id="Drw-V4-dwI"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
@@ -93,6 +102,7 @@
                         <outlet property="addLineButton" destination="CiV-Kg-5lb" id="Y7U-ld-Sxh"/>
                         <outlet property="buttonsSwitch" destination="at0-1T-Kad" id="htP-2l-Z4d"/>
                         <outlet property="doneButton" destination="dgo-Ck-Yoo" id="OKM-as-PFq"/>
+                        <outlet property="editButton" destination="rfH-5I-bCL" id="oO7-It-Ach"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="F71-Ao-By3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -106,10 +116,12 @@
                     <toolbarItems/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="7nk-Vn-uP5">
+                        <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="qmu-4e-dxF">
+                        <rect key="frame" x="0.0" y="813" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
@@ -122,9 +134,13 @@
         </scene>
     </scenes>
     <resources>
+        <image name="list.number" catalog="system" width="128" height="97"/>
         <image name="waveform.path.badge.plus" catalog="system" width="128" height="114"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGray5Color">
             <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
