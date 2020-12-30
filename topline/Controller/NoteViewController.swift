@@ -48,6 +48,10 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     }
     
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
+        editPressed = false
+        editButton.tintColor = UIColor.systemGray2
+        tableView.isEditing = false
+        
         donePressed = true
         hideNavigationButton()
         tableView.reloadData()
@@ -130,6 +134,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         }
        
     }
+    
     
     @IBAction func editButtonPressed(_ sender: Any) {
         if editPressed == false {
