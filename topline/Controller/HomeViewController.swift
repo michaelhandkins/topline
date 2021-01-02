@@ -10,6 +10,9 @@ import RealmSwift
 
 class HomeViewController: UITableViewController {
     
+    
+    @IBOutlet weak var settingsButton: UIBarButtonItem!
+    
     var addButtonPressed: Bool = false
     let realm = try! Realm()
     var selectedSong: Note?
@@ -34,6 +37,9 @@ class HomeViewController: UITableViewController {
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
+    
+    
+    
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -81,6 +87,11 @@ class HomeViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
+        if segue.identifier == "SettingsSegue" {
+            let vc = segue.destination as! SettingsViewController
+            return
+        }
+        
         let vc = segue.destination as! NoteViewController
         vc.hidesBottomBarWhenPushed = false
         if let songForVC = selectedSong {

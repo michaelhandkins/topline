@@ -323,6 +323,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
 
 //MARK: - TextView Delegate Methods
 extension NoteViewController: UITextViewDelegate {
+
     
     func textViewDidChange(_ textView: UITextView) {
         let str = textView.text ?? ""
