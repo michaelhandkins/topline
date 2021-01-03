@@ -72,12 +72,22 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     }
     func showNavigationButton() {
         doneButton.isEnabled = true
-        doneButton.tintColor = UIColor.systemIndigo
+        if let theme = defaults.string(forKey: "theme") {
+            doneButton.tintColor = UIColor.init(named: theme)
+        } else {
+            doneButton.tintColor = UIColor.systemIndigo
+        }
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.toolbar.isHidden = false
+        
+        if let theme = defaults.string(forKey: "theme") {
+            self.navigationController?.navigationBar.tintColor = UIColor.init(named: theme)
+            buttonsSwitch.onTintColor = UIColor.init(named: theme)
+            addButton.tintColor = UIColor.init(named: theme)
+        }
     }
     
     override func viewDidLoad() {
@@ -119,6 +129,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
+    
     @objc private func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
@@ -147,11 +158,21 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         } else {
             editPressed = false
         }
-        if editButton.tintColor == UIColor.systemIndigo {
-            editButton.tintColor = UIColor.systemGray2
+        
+        if let theme = defaults.string(forKey: "theme") {
+            if editButton.tintColor == UIColor.init(named: theme) {
+                editButton.tintColor = UIColor.systemGray2
+            } else {
+                editButton.tintColor = UIColor.init(named: theme)
+            }
         } else {
-            editButton.tintColor = UIColor.systemIndigo
+            if editButton.tintColor == UIColor.systemIndigo {
+                editButton.tintColor = UIColor.systemGray2
+            } else {
+                editButton.tintColor = UIColor.systemIndigo
+            }
         }
+        
         if tableView.isEditing == true {
             tableView.isEditing = false
         } else {
@@ -272,7 +293,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         } else if indexPath.row == 0 && song.title != "Untitled" {
             cell.lyricsField.text = song.title
             cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 36.0)
-            cell.lyricsField.textColor = UIColor(named: "darkModeIndigo")
+            cell.lyricsField.textColor = UIColor(named: "darkModeBlack")
             cell.recordButton.isHidden = true
         }
         
@@ -344,7 +365,7 @@ extension NoteViewController: UITextViewDelegate {
         }
         if textView.textColor == UIColor.lightGray {
             textView.text = nil
-            textView.textColor = UIColor(named: "darkModeIndigo")
+            textView.textColor = UIColor(named: "darkModeBlack")
         }
     }
     

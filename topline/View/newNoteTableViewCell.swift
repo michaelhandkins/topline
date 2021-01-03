@@ -16,7 +16,7 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
     
-    
+    let defaults = UserDefaults.standard
     var recorder = AVAudioRecorder()
     var player = AVAudioPlayer()
     var fileName: String = "recording.m4a"
@@ -38,6 +38,11 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
         // make sure scroll is disabled
         lyricsField.isScrollEnabled = false
         loadRecordings()
+        if let theme = defaults.string(forKey: "theme") {
+            recordButton.tintColor = UIColor.init(named: theme)
+            deleteButton.tintColor = UIColor.init(named: theme)
+            lyricsField.tintColor = UIColor.init(named: theme)
+        }
     }
     
     override func awakeFromNib() {
