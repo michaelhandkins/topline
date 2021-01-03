@@ -12,10 +12,12 @@ class HomeViewController: UITableViewController {
     
     
     @IBOutlet weak var settingsButton: UIBarButtonItem!
+    @IBOutlet weak var newSongButton: UIBarButtonItem!
     
     var addButtonPressed: Bool = false
     let realm = try! Realm()
     var selectedSong: Note?
+    let defaults = UserDefaults.standard
     
     var songs: Results<Note>?
     
@@ -24,6 +26,7 @@ class HomeViewController: UITableViewController {
         
         tableView.rowHeight = 55
         loadSongs()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -32,6 +35,11 @@ class HomeViewController: UITableViewController {
         loadSongs()
         selectedSong = nil
         addButtonPressed = false
+        
+        if let theme = defaults.string(forKey: "theme") {
+            settingsButton.tintColor = UIColor.init(named: theme)
+            newSongButton.tintColor = UIColor.init(named: theme)
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {

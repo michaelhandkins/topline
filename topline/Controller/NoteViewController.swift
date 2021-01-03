@@ -11,6 +11,7 @@ import SwipeCellKit
 
 class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
+    let defaults = UserDefaults.standard
     var editPressed: Bool = false
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var buttonsSwitch: UISwitch!
@@ -81,6 +82,10 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let theme = defaults.string(forKey: "theme") {
+            self.navigationController?.navigationBar.tintColor = UIColor.init(named: theme)
+        }
         
         hideNavigationButton()
         
