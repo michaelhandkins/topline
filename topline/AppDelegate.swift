@@ -12,7 +12,7 @@ import AVFoundation
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    let defaults = UserDefaults.standard
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -21,8 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             print("Error when ititializing first Realm: \(error)")
         }
-        
+
         return true
+            
     }
 
     // MARK: UISceneSession Lifecycle

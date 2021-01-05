@@ -10,9 +10,14 @@ import RealmSwift
 
 class HomeViewController: UITableViewController {
     
+    
+    @IBOutlet weak var settingsButton: UIBarButtonItem!
+    @IBOutlet weak var newSongButton: UIBarButtonItem!
+    
     var addButtonPressed: Bool = false
     let realm = try! Realm()
     var selectedSong: Note?
+    let defaults = UserDefaults.standard
     
     var songs: Results<Note>?
     
@@ -21,6 +26,7 @@ class HomeViewController: UITableViewController {
         
         tableView.rowHeight = 55
         loadSongs()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -29,11 +35,42 @@ class HomeViewController: UITableViewController {
         loadSongs()
         selectedSong = nil
         addButtonPressed = false
+        
+        if let theme = defaults.string(forKey: "theme") {
+            settingsButton.tintColor = UIColor.init(named: theme)
+            newSongButton.tintColor = UIColor.init(named: theme)
+        } else {
+            settingsButton.tintColor = UIColor.systemIndigo
+            newSongButton.tintColor = UIColor.systemIndigo
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        var darkMode: Bool = false
+        
+        if traitCollection.userInterfaceStyle == .dark {
+            darkMode = true
+        }
+        
+        if let defaultsDark = defaults.string(forKey: "darkMode") {
+            darkMode = Bool(defaultsDark)!
+        }
+        
+        if darkMode == true {
+            print(true)
+            self.view.window?.overrideUserInterfaceStyle = .dark
+        } else {
+            print(false)
+            self.view.window?.overrideUserInterfaceStyle = .light
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.navigationBar.prefersLargeTitles = false
     }
+    
+    
+    
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -81,6 +118,11 @@ class HomeViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
+        if segue.identifier == "SettingsSegue" {
+            let vc = segue.destination as! SettingsViewController
+            return
+        }
+        
         let vc = segue.destination as! NoteViewController
         vc.hidesBottomBarWhenPushed = false
         if let songForVC = selectedSong {
