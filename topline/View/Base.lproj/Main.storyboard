@@ -4,10 +4,124 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Settings View Controller-->
+        <scene sceneID="6Ue-hR-rCP">
+            <objects>
+                <viewController id="OBd-sB-7gd" customClass="SettingsViewController" customModule="topline" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="DdJ-zx-dg8">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Theme" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QXO-Ur-qhx">
+                                <rect key="frame" x="20" y="160" width="64" height="24"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                <color key="textColor" name="darkModeBlack"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h3r-cF-H4F">
+                                <rect key="frame" x="20" y="199" width="374" height="74"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="fY7-SM-rmA">
+                                        <rect key="frame" x="30" y="15" width="314" height="22"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ckz-vK-sLL">
+                                                <rect key="frame" x="0.0" y="0.0" width="61" height="22"/>
+                                                <color key="tintColor" red="0.33950257299999997" green="0.33188059930000002" blue="0.83541327710000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" image="circle" catalog="system"/>
+                                                <connections>
+                                                    <action selector="indigoPressed:" destination="OBd-sB-7gd" eventType="touchUpInside" id="MUp-ZO-6DV"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7He-oC-oog">
+                                                <rect key="frame" x="63" y="0.0" width="61.5" height="22"/>
+                                                <color key="tintColor" name="LAGreen"/>
+                                                <state key="normal" image="circle" catalog="system"/>
+                                                <connections>
+                                                    <action selector="greenPressed:" destination="OBd-sB-7gd" eventType="touchUpInside" id="MQV-T4-h06"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ghf-0h-5Xk">
+                                                <rect key="frame" x="126.5" y="0.0" width="61" height="22"/>
+                                                <color key="tintColor" name="LAPink"/>
+                                                <state key="normal" image="circle" catalog="system"/>
+                                                <connections>
+                                                    <action selector="pinkPressed:" destination="OBd-sB-7gd" eventType="touchUpInside" id="KLY-Kp-Gwc"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wUE-LN-Hoo">
+                                                <rect key="frame" x="189.5" y="0.0" width="61.5" height="22"/>
+                                                <color key="tintColor" name="LAGold"/>
+                                                <state key="normal" image="circle" catalog="system"/>
+                                                <connections>
+                                                    <action selector="goldPressed:" destination="OBd-sB-7gd" eventType="touchUpInside" id="1pc-Wc-EbU"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PD8-Rz-541">
+                                                <rect key="frame" x="253" y="0.0" width="61" height="22"/>
+                                                <color key="tintColor" name="LARed"/>
+                                                <state key="normal" image="circle" catalog="system"/>
+                                                <connections>
+                                                    <action selector="redPressed:" destination="OBd-sB-7gd" eventType="touchUpInside" id="2qC-Qx-iOV"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="fY7-SM-rmA" firstAttribute="top" secondItem="h3r-cF-H4F" secondAttribute="top" constant="15" id="Ixc-l3-1Ep"/>
+                                    <constraint firstAttribute="height" constant="74" id="RgU-VZ-2yz"/>
+                                    <constraint firstItem="fY7-SM-rmA" firstAttribute="leading" secondItem="h3r-cF-H4F" secondAttribute="leading" constant="30" id="h6O-3O-7SP"/>
+                                    <constraint firstAttribute="trailing" secondItem="fY7-SM-rmA" secondAttribute="trailing" constant="30" id="sEf-40-Z48"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dark Mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3UU-tV-OZQ">
+                                <rect key="frame" x="20" y="273" width="100" height="24"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="drX-mf-A7x">
+                                <rect key="frame" x="182.5" y="308" width="51" height="31"/>
+                                <connections>
+                                    <action selector="darkModeFlipped:" destination="OBd-sB-7gd" eventType="valueChanged" id="rMo-Rw-BZX"/>
+                                </connections>
+                            </switch>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="BRZ-G1-ZDG"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="drX-mf-A7x" firstAttribute="centerX" secondItem="DdJ-zx-dg8" secondAttribute="centerX" id="AQc-md-8zD"/>
+                            <constraint firstItem="QXO-Ur-qhx" firstAttribute="leading" secondItem="BRZ-G1-ZDG" secondAttribute="leading" constant="20" id="JPz-Wt-3Fj"/>
+                            <constraint firstItem="3UU-tV-OZQ" firstAttribute="top" secondItem="h3r-cF-H4F" secondAttribute="bottom" id="NAP-Ef-TbR"/>
+                            <constraint firstItem="3UU-tV-OZQ" firstAttribute="leading" secondItem="BRZ-G1-ZDG" secondAttribute="leading" constant="20" id="cQU-kH-GWX"/>
+                            <constraint firstItem="drX-mf-A7x" firstAttribute="top" secondItem="3UU-tV-OZQ" secondAttribute="bottom" constant="11" id="dtc-rw-qMb"/>
+                            <constraint firstItem="BRZ-G1-ZDG" firstAttribute="trailing" secondItem="h3r-cF-H4F" secondAttribute="trailing" constant="20" id="f21-Zk-IGV"/>
+                            <constraint firstItem="h3r-cF-H4F" firstAttribute="leading" secondItem="BRZ-G1-ZDG" secondAttribute="leading" constant="20" id="fNc-bc-G2Y"/>
+                            <constraint firstItem="QXO-Ur-qhx" firstAttribute="top" secondItem="BRZ-G1-ZDG" secondAttribute="top" constant="20" id="kte-kB-Pug"/>
+                            <constraint firstItem="h3r-cF-H4F" firstAttribute="top" secondItem="QXO-Ur-qhx" secondAttribute="bottom" constant="15" id="wi6-6H-YAE"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="ADS-7w-fcd"/>
+                    <connections>
+                        <outlet property="darkModeSwitch" destination="drX-mf-A7x" id="SQ5-zD-rGC"/>
+                        <outlet property="goldButton" destination="wUE-LN-Hoo" id="KwF-sy-CDQ"/>
+                        <outlet property="greenButton" destination="7He-oC-oog" id="hBE-vS-WKu"/>
+                        <outlet property="indigoButton" destination="ckz-vK-sLL" id="90J-yI-Lyt"/>
+                        <outlet property="pinkButton" destination="Ghf-0h-5Xk" id="ZgG-9T-ZsU"/>
+                        <outlet property="redButton" destination="PD8-Rz-541" id="Kce-rE-tMl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YCg-sn-UfX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1421.7391304347827" y="-727.23214285714278"/>
+        </scene>
         <!--Songs-->
         <scene sceneID="Oq8-DH-sEa">
             <objects>
@@ -32,6 +146,12 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Songs" id="acv-Sh-zGY">
+                        <barButtonItem key="leftBarButtonItem" image="gearshape.2.fill" catalog="system" id="AVr-2x-EYJ">
+                            <color key="tintColor" red="0.33950257299999997" green="0.33188059930000002" blue="0.83541327710000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <segue destination="OBd-sB-7gd" kind="show" identifier="SettingsSegue" id="kwc-iV-bZ7"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="waveform.path.badge.plus" catalog="system" id="z4p-UW-MXl">
                             <color key="tintColor" systemColor="systemIndigoColor"/>
                             <connections>
@@ -41,6 +161,8 @@
                     </navigationItem>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="newSongButton" destination="z4p-UW-MXl" id="VU1-BD-cy5"/>
+                        <outlet property="settingsButton" destination="AVr-2x-EYJ" id="UbZ-Jt-ecK"/>
                         <segue destination="aBn-Gq-wO3" kind="show" identifier="toNoteSegue" id="phk-vF-4dC"/>
                     </connections>
                 </tableViewController>
@@ -134,8 +256,25 @@
         </scene>
     </scenes>
     <resources>
+        <image name="circle" catalog="system" width="128" height="121"/>
+        <image name="gearshape.2.fill" catalog="system" width="128" height="100"/>
         <image name="list.number" catalog="system" width="128" height="97"/>
         <image name="waveform.path.badge.plus" catalog="system" width="128" height="114"/>
+        <namedColor name="LAGold">
+            <color red="0.87900000810623169" green="0.7850000262260437" blue="0.26199999451637268" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="LAGreen">
+            <color red="0.059999998658895493" green="0.88099998235702515" blue="0.33300000429153442" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="LAPink">
+            <color red="0.91500002145767212" green="0.52999997138977051" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="LARed">
+            <color red="0.77799999713897705" green="0.012000000104308128" blue="0.029999999329447746" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="darkModeBlack">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
