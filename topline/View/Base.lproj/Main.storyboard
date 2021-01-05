@@ -81,11 +81,27 @@
                                     <constraint firstAttribute="trailing" secondItem="fY7-SM-rmA" secondAttribute="trailing" constant="30" id="sEf-40-Z48"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dark Mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3UU-tV-OZQ">
+                                <rect key="frame" x="20" y="273" width="100" height="24"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="drX-mf-A7x">
+                                <rect key="frame" x="182.5" y="308" width="51" height="31"/>
+                                <connections>
+                                    <action selector="darkModeFlipped:" destination="OBd-sB-7gd" eventType="valueChanged" id="rMo-Rw-BZX"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="BRZ-G1-ZDG"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="drX-mf-A7x" firstAttribute="centerX" secondItem="DdJ-zx-dg8" secondAttribute="centerX" id="AQc-md-8zD"/>
                             <constraint firstItem="QXO-Ur-qhx" firstAttribute="leading" secondItem="BRZ-G1-ZDG" secondAttribute="leading" constant="20" id="JPz-Wt-3Fj"/>
+                            <constraint firstItem="3UU-tV-OZQ" firstAttribute="top" secondItem="h3r-cF-H4F" secondAttribute="bottom" id="NAP-Ef-TbR"/>
+                            <constraint firstItem="3UU-tV-OZQ" firstAttribute="leading" secondItem="BRZ-G1-ZDG" secondAttribute="leading" constant="20" id="cQU-kH-GWX"/>
+                            <constraint firstItem="drX-mf-A7x" firstAttribute="top" secondItem="3UU-tV-OZQ" secondAttribute="bottom" constant="11" id="dtc-rw-qMb"/>
                             <constraint firstItem="BRZ-G1-ZDG" firstAttribute="trailing" secondItem="h3r-cF-H4F" secondAttribute="trailing" constant="20" id="f21-Zk-IGV"/>
                             <constraint firstItem="h3r-cF-H4F" firstAttribute="leading" secondItem="BRZ-G1-ZDG" secondAttribute="leading" constant="20" id="fNc-bc-G2Y"/>
                             <constraint firstItem="QXO-Ur-qhx" firstAttribute="top" secondItem="BRZ-G1-ZDG" secondAttribute="top" constant="20" id="kte-kB-Pug"/>
@@ -94,6 +110,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="ADS-7w-fcd"/>
                     <connections>
+                        <outlet property="darkModeSwitch" destination="drX-mf-A7x" id="SQ5-zD-rGC"/>
                         <outlet property="goldButton" destination="wUE-LN-Hoo" id="KwF-sy-CDQ"/>
                         <outlet property="greenButton" destination="7He-oC-oog" id="hBE-vS-WKu"/>
                         <outlet property="indigoButton" destination="ckz-vK-sLL" id="90J-yI-Lyt"/>

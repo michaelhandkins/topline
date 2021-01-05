@@ -11,6 +11,7 @@ class SettingsViewController: UIViewController {
 
     let defaults = UserDefaults.standard
     
+    @IBOutlet weak var darkModeSwitch: UISwitch!
     @IBOutlet weak var indigoButton: UIButton!
     @IBOutlet weak var greenButton: UIButton!
     @IBOutlet weak var pinkButton: UIButton!
@@ -22,6 +23,12 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         
         setBarTint()
+        
+        if traitCollection.userInterfaceStyle == .light {
+            darkModeSwitch.isOn = false
+        } else {
+            darkModeSwitch.isOn = true
+        }
     }
     
     func setBarTint() {
@@ -76,6 +83,22 @@ class SettingsViewController: UIViewController {
         self.defaults.setValue("LARed", forKey: "theme")
         setBarTint()
     }
+    
+    @IBAction func darkModeFlipped(_ sender: Any) {
+        
+        if traitCollection.userInterfaceStyle == .light {
+            self.defaults.setValue("true", forKey: "darkMode")
+            self.view.window?.overrideUserInterfaceStyle = .dark
+        } else {
+            self.defaults.setValue("false", forKey: "darkMode")
+            self.view.window?.overrideUserInterfaceStyle = .light
+        }
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "darkModeSwitched"), object: self)
+        
+    }
+
+    
     
 
 }

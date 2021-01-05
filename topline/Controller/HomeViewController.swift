@@ -41,6 +41,26 @@ class HomeViewController: UITableViewController {
             newSongButton.tintColor = UIColor.init(named: theme)
         }
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        var darkMode: Bool = false
+        
+        if traitCollection.userInterfaceStyle == .dark {
+            darkMode = true
+        }
+        
+        if let defaultsDark = defaults.string(forKey: "darkMode") {
+            darkMode = Bool(defaultsDark)!
+        }
+        
+        if darkMode == true {
+            print(true)
+            self.view.window?.overrideUserInterfaceStyle = .dark
+        } else {
+            print(false)
+            self.view.window?.overrideUserInterfaceStyle = .light
+        }
+    }
 
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.navigationBar.prefersLargeTitles = false
