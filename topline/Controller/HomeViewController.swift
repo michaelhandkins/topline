@@ -39,6 +39,9 @@ class HomeViewController: UITableViewController {
         if let theme = defaults.string(forKey: "theme") {
             settingsButton.tintColor = UIColor.init(named: theme)
             newSongButton.tintColor = UIColor.init(named: theme)
+        } else {
+            settingsButton.tintColor = UIColor.systemIndigo
+            newSongButton.tintColor = UIColor.systemIndigo
         }
     }
     

@@ -146,10 +146,10 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Songs" id="acv-Sh-zGY">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="gearshape.fill" catalog="system" id="2Dx-JB-imu">
+                        <barButtonItem key="leftBarButtonItem" image="gearshape.2.fill" catalog="system" id="AVr-2x-EYJ">
                             <color key="tintColor" red="0.33950257299999997" green="0.33188059930000002" blue="0.83541327710000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
-                                <segue destination="OBd-sB-7gd" kind="show" identifier="SettingsSegue" id="tAz-AG-chu"/>
+                                <segue destination="OBd-sB-7gd" kind="show" identifier="SettingsSegue" id="kwc-iV-bZ7"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="waveform.path.badge.plus" catalog="system" id="z4p-UW-MXl">
@@ -162,7 +162,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="newSongButton" destination="z4p-UW-MXl" id="VU1-BD-cy5"/>
-                        <outlet property="settingsButton" destination="2Dx-JB-imu" id="HuT-ZM-bfl"/>
+                        <outlet property="settingsButton" destination="AVr-2x-EYJ" id="UbZ-Jt-ecK"/>
                         <segue destination="aBn-Gq-wO3" kind="show" identifier="toNoteSegue" id="phk-vF-4dC"/>
                     </connections>
                 </tableViewController>
@@ -257,20 +257,20 @@
     </scenes>
     <resources>
         <image name="circle" catalog="system" width="128" height="121"/>
-        <image name="gearshape.fill" catalog="system" width="128" height="121"/>
+        <image name="gearshape.2.fill" catalog="system" width="128" height="100"/>
         <image name="list.number" catalog="system" width="128" height="97"/>
         <image name="waveform.path.badge.plus" catalog="system" width="128" height="114"/>
         <namedColor name="LAGold">
-            <color red="0.87935152202072542" green="0.78529873232352687" blue="0.26220631576369741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.87900000810623169" green="0.7850000262260437" blue="0.26199999451637268" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="LAGreen">
-            <color red="0.059702352585494188" green="0.88070757772020725" blue="0.3332891389155902" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.059999998658895493" green="0.88099998235702515" blue="0.33300000429153442" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="LAPink">
-            <color red="0.9154927179049408" green="0.53027547802724406" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.91500002145767212" green="0.52999997138977051" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="LARed">
-            <color red="0.77758662564766845" green="0.012262007940564847" blue="0.030328026081247225" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.77799999713897705" green="0.012000000104308128" blue="0.029999999329447746" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="darkModeBlack">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

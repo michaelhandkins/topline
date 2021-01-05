@@ -123,6 +123,14 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             }
         }
         
+        do {
+            try realm.write {
+                self.song.lastEdited = Date()
+            }
+        } catch {
+            print("Error updating when the song was last edited.")
+        }
+        
         tableView.register(UINib(nibName: "newNoteTableViewCell", bundle: nil), forCellReuseIdentifier: "lyricsCell")
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -140,16 +148,16 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         tableView.contentInset = .zero
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        do {
-            try realm.write {
-                self.song.lastEdited = Date()
-            }
-        } catch {
-            print("Error updating when the song was last edited.")
-        }
-       
-    }
+//    override func viewDidDisappear(_ animated: Bool) {
+//        do {
+//            try realm.write {
+//                self.song.lastEdited = Date()
+//            }
+//        } catch {
+//            print("Error updating when the song was last edited.")
+//        }
+//
+//    }
     
     
     @IBAction func editButtonPressed(_ sender: Any) {
