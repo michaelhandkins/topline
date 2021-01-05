@@ -29,6 +29,12 @@ class SettingsViewController: UIViewController {
         } else {
             darkModeSwitch.isOn = true
         }
+        
+        if let theme = defaults.string(forKey: "theme") {
+            darkModeSwitch.onTintColor = UIColor.init(named: theme)
+        } else {
+            darkModeSwitch.onTintColor = UIColor.systemIndigo
+        }
     }
     
     func setBarTint() {
@@ -54,6 +60,7 @@ class SettingsViewController: UIViewController {
                 indigoButton.setImage(UIImage.init(systemName: "circle.fill"), for: .normal)
             }
             self.navigationController?.navigationBar.tintColor = UIColor.init(named: theme)
+            darkModeSwitch.onTintColor = UIColor.init(named: theme)
         }
     }
     
