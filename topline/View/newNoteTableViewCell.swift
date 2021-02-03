@@ -126,7 +126,6 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
         recording = Recording()
         recording!.audioFileName = fileName
         recording!.date = self.date
-        //            newRecording.urlString = recorder.url.absoluteString
         //The Recording is then added to realm
         do {
             try realm.write {
