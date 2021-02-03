@@ -52,10 +52,10 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
     }
     
     //MARK: - AVAudioRecorder and Player Delegate Methods
+    
     func getDocumentDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
@@ -103,11 +103,6 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
             print(error.description)
         }
 
-//        let recordSettings = [AVFormatIDKey : kAudioFormatAppleLossless,
-//                              AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
-//                              AVEncoderBitRateKey : 320000,
-//                              AVNumberOfChannelsKey : 2,
-//                              AVSampleRateKey : 44100.0] as [String : Any]
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
             AVSampleRateKey: 44100,

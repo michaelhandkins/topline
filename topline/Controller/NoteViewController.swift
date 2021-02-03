@@ -65,7 +65,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         tableView.reloadData()
     }
     
-    
     func hideNavigationButton() {
         doneButton.isEnabled = false
         doneButton.tintColor = UIColor.clear
@@ -78,7 +77,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             doneButton.tintColor = UIColor.systemIndigo
         }
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.toolbar.isHidden = false
@@ -147,18 +145,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     @objc private func keyboardWillHide(notification: NSNotification) {
         tableView.contentInset = .zero
     }
-    
-//    override func viewDidDisappear(_ animated: Bool) {
-//        do {
-//            try realm.write {
-//                self.song.lastEdited = Date()
-//            }
-//        } catch {
-//            print("Error updating when the song was last edited.")
-//        }
-//
-//    }
-    
     
     @IBAction func editButtonPressed(_ sender: Any) {
         if editPressed == false {
@@ -352,13 +338,11 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     func loadRecordings() {
         recordings = realm.objects(Recording.self)
     }
-       
 }
 
 //MARK: - TextView Delegate Methods
 extension NoteViewController: UITextViewDelegate {
 
-    
     func textViewDidChange(_ textView: UITextView) {
         let str = textView.text ?? ""
         // tell the controller
