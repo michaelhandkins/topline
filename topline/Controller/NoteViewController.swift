@@ -172,6 +172,8 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         } else {
             tableView.isEditing = true
         }
+        
+        tableView.reloadData()
     }
     
 
@@ -187,7 +189,9 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         do {
             try self.realm.write {
-                self.song.lyrics.swapAt(sourceIndexPath.row-1, destinationIndexPath.row-1)
+                let lyric = self.song.lyrics[sourceIndexPath.row-1]
+                self.song.lyrics.remove(at: sourceIndexPath.row-1)
+                self.song.lyrics.insert(lyric, at: destinationIndexPath.row-1)
                 print("Song lyrics updated in Realm")
             }
         } catch {
