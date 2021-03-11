@@ -17,8 +17,8 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     @IBOutlet weak var deleteButton: UIButton!
     
     let defaults = UserDefaults.standard
-    var recorder = AVAudioRecorder()
-    var player = AVAudioPlayer()
+    var recorder: AVAudioRecorder!
+    var player: AVAudioPlayer!
     var fileName: String = "recording.m4a"
     var recordings: Results<Recording>?
     func loadRecordings() {
@@ -62,12 +62,12 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
     }
     
     @IBAction func recordButtonPressed(_ sender: UIButton) {
-        if recordButton.currentImage == UIImage(systemName: "record.circle") {
+        if recordButton.currentImage == UIImage(systemName: "waveform.circle") {
             setupRecorder()
             recorder.record()
             print(fileName)
-            recordButton.setImage(UIImage(systemName: "record.circle.fill"), for: .normal)
-        } else if recordButton.currentImage == UIImage(systemName: "record.circle.fill") {
+            recordButton.setImage(UIImage(systemName: "waveform.circle.fill"), for: .normal)
+        } else if recordButton.currentImage == UIImage(systemName: "waveform.circle.fill") {
             recorder.stop()
             recordButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
         } else if recordButton.currentImage == UIImage(systemName: "play.circle") {
@@ -89,7 +89,7 @@ class newNoteTableViewCell: UITableViewCell, UITextViewDelegate, AVAudioPlayerDe
             print("Error when trying to delete recording from realm with delete button")
         }
         deleteButton.isHidden = true
-        recordButton.setImage(UIImage(systemName: "record.circle"), for: .normal)
+        recordButton.setImage(UIImage(systemName: "waveform.circle"), for: .normal)
         recordButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
     

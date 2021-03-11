@@ -249,7 +249,7 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
                 let safeRecording = safeRecordings.filter({ $0.audioFileName == cell.fileName }).first
                 cell.recording = safeRecording
             } else {
-                cell.recordButton.setImage(UIImage(systemName: "record.circle"), for: .normal)
+                cell.recordButton.setImage(UIImage(systemName: "waveform.circle"), for: .normal)
             }
         }
         
@@ -266,6 +266,14 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
         }
         
         if switchFlipped == true {
+            cell.recordButton.isHidden = true
+            cell.deleteButton.isHidden = true
+        } else {
+            cell.recordButton.isHidden = false
+            cell.recordButton.isHidden = false
+        }
+        
+        if editPressed == true {
             cell.recordButton.isHidden = true
             cell.deleteButton.isHidden = true
         } else {
