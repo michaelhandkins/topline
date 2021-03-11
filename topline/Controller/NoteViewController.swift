@@ -265,7 +265,15 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             tableView.performBatchUpdates(nil)
         }
         
-        if switchFlipped == true {
+//        if editPressed == true {
+//            cell.recordButton.isHidden = true
+//            cell.deleteButton.isHidden = true
+//        } else {
+//            cell.recordButton.isHidden = false
+//            cell.recordButton.isHidden = false
+//        }
+        
+        if switchFlipped == true || editPressed == true {
             cell.recordButton.isHidden = true
             cell.deleteButton.isHidden = true
         } else {
@@ -273,13 +281,6 @@ class NoteViewController: UITableViewController, AVAudioRecorderDelegate, AVAudi
             cell.recordButton.isHidden = false
         }
         
-        if editPressed == true {
-            cell.recordButton.isHidden = true
-            cell.deleteButton.isHidden = true
-        } else {
-            cell.recordButton.isHidden = false
-            cell.recordButton.isHidden = false
-        }
         
         if indexPath.row == 0 && song.title == "Untitled" {
             cell.lyricsField.font = UIFont.boldSystemFont(ofSize: 36.0)
