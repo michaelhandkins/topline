@@ -13,6 +13,8 @@ class HomeViewController: UITableViewController {
     
     @IBOutlet weak var settingsButton: UIBarButtonItem!
     @IBOutlet weak var newSongButton: UIBarButtonItem!
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     
     var addButtonPressed: Bool = false
     let realm = try! Realm()
@@ -25,6 +27,7 @@ class HomeViewController: UITableViewController {
         super.viewDidLoad()
         
         tableView.rowHeight = 55
+        searchBar.delegate = self
         loadSongs()
         
     }
@@ -130,6 +133,31 @@ class HomeViewController: UITableViewController {
         }
     }
     
-    
+}
 
+extension HomeViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        songs = songs?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "title", ascending: true)
+        tableView.reloadData()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loadSongs()
+            
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        } else {
+            loadSongs()
+            songs = songs?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "title", ascending: true)
+            tableView.reloadData()
+        }
+        
+        
+        
+    }
+    
 }
