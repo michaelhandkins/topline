@@ -13,6 +13,8 @@ class HomeViewController: UITableViewController {
     
     @IBOutlet weak var settingsButton: UIBarButtonItem!
     @IBOutlet weak var newSongButton: UIBarButtonItem!
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     
     var addButtonPressed: Bool = false
     let realm = try! Realm()
@@ -130,6 +132,10 @@ class HomeViewController: UITableViewController {
         }
     }
     
-    
+}
 
+extension HomeViewController: UISearchBarDelegate {
+    
+    
+    
 }
